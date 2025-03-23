@@ -1,0 +1,7 @@
+path: ./USE
+train: images/train  # 训练集图像路径
+val: images/val      # 验证集图像路径
+
+nc: 1  # 类别数目
+names:
+  0: fish  # 类别名称
