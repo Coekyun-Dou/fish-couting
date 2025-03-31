@@ -147,11 +147,17 @@ QPushButton:pressed{
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>400</x>
       <y>490</y>
       <width>411</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>411</width>
+      <height>31</height>
+     </size>
     </property>
     <property name="font">
      <font>
@@ -164,7 +170,16 @@ QPushButton:pressed{
      <string notr="true">color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>广东海洋大学海上“风渔融合”智能运维创新团队研发</string>
+     <string>         广东海洋大学AI应用创新创业团队</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="margin">
+     <number>3</number>
+    </property>
+    <property name="indent">
+     <number>5</number>
     </property>
    </widget>
    <widget class="QLabel" name="label_9">

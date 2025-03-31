@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1394</width>
-    <height>783</height>
+    <width>727</width>
+    <height>546</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -118,7 +118,8 @@ border-radius:0px;}</string>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">image: url(:/img/icon/conan.png);</string>
+             <string notr="true">image: url(:/img/icon/conan.png);
+image: url(:/images/icons/logo.png);</string>
             </property>
             <property name="text">
              <string/>
@@ -178,6 +179,8 @@ color: rgb(218, 218, 218);
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
+	
+	image: url(:/icons/icons/最小化.png);
 border-style: solid;
 border-width: 0px;
 border-radius: 0px;
@@ -193,7 +196,7 @@ background-color: rgba(223, 223, 223, 150);}</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../apprcc.qrc">
+               <iconset>
                 <normaloff>:/img/icon/最小化.png</normaloff>:/img/icon/最小化.png</iconset>
               </property>
              </widget>
@@ -214,6 +217,7 @@ background-color: rgba(223, 223, 223, 150);}</string>
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
+	image: url(:/icons/icons/最大化.png);
 border-style: solid;
 border-width: 0px;
 border-radius: 0px;
@@ -229,7 +233,7 @@ background-color: rgba(223, 223, 223, 150);}</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../apprcc.qrc">
+               <iconset>
                 <normaloff>:/img/icon/正方形.png</normaloff>
                 <activeon>:/img/icon/还原.png</activeon>
                 <selectedon>:/img/icon/还原.png</selectedon>:/img/icon/正方形.png</iconset>
@@ -255,6 +259,7 @@ background-color: rgba(223, 223, 223, 150);}</string>
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
+	image: url(:/icons/icons/关闭.png);
 border-style: solid;
 border-width: 0px;
 border-radius: 0px;
@@ -270,7 +275,7 @@ background-color: rgba(223, 223, 223, 150);}</string>
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../apprcc.qrc">
+               <iconset>
                 <normaloff>:/img/icon/关闭.png</normaloff>:/img/icon/关闭.png</iconset>
               </property>
              </widget>
@@ -586,6 +591,7 @@ border-radius:0px;}</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton{font-family: &quot;Microsoft YaHei&quot;;
+	image: url(:/icons/icons/打开.png);
 font-size: 14px;
 font-weight: bold;
 color:white;
@@ -641,7 +647,7 @@ background-color: rgba(48,148,243,80);}</string>
                       <string/>
                      </property>
                      <property name="icon">
-                      <iconset resource="../apprcc.qrc">
+                      <iconset>
                        <normaloff>:/img/icon/打开.png</normaloff>:/img/icon/打开.png</iconset>
                      </property>
                     </widget>
@@ -665,6 +671,7 @@ background-color: rgba(48,148,243,80);}</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton{font-family: &quot;Microsoft YaHei&quot;;
+	image: url(:/icons/icons/摄像头开.png);
 font-size: 14px;
 font-weight: bold;
 color:white;
@@ -720,7 +727,7 @@ background-color: rgba(48,148,243,80);}</string>
                       <string/>
                      </property>
                      <property name="icon">
-                      <iconset resource="../apprcc.qrc">
+                      <iconset>
                        <normaloff>:/img/icon/摄像头开.png</normaloff>:/img/icon/摄像头开.png</iconset>
                      </property>
                     </widget>
@@ -744,6 +751,7 @@ background-color: rgba(48,148,243,80);}</string>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton{font-family: &quot;Microsoft YaHei&quot;;
+	image: url(:/icons/icons/实时视频流解析.png);
 font-size: 14px;
 font-weight: bold;
 color:white;
@@ -799,7 +807,7 @@ background-color: rgba(48,148,243,80);}</string>
                       <string/>
                      </property>
                      <property name="icon">
-                      <iconset resource="../apprcc.qrc">
+                      <iconset>
                        <normaloff>:/img/icon/实时视频流解析.png</normaloff>:/img/icon/实时视频流解析.png</iconset>
                      </property>
                     </widget>
@@ -872,6 +880,7 @@ border-color: rgba(200, 200, 200,100);
 border-radius: 3px;}
 
 QDoubleSpinBox::down-button{
+	image: url(:/icons/icons/箭头_列表展开.png);
 background:rgba(200, 200, 200,0);
 border-image: url(:/img/icon/箭头_列表展开.png);}
 QDoubleSpinBox::down-button::hover{
@@ -880,6 +889,7 @@ border-image: url(:/img/icon/箭头_列表展开.png);}
 
 QDoubleSpinBox::up-button{
 background:rgba(200, 200, 200,0);
+	image: url(:/icons/icons/箭头_列表收起.png);
 border-image: url(:/img/icon/箭头_列表收起.png);}
 QDoubleSpinBox::up-button::hover{
 background:rgba(200, 200, 200,100);
@@ -1004,6 +1014,8 @@ border-radius: 3px;}
 
 QDoubleSpinBox::down-button{
 background:rgba(200, 200, 200,0);
+	image: url(:/icons/icons/箭头_列表收起.png);
+	image: url(:/icons/icons/箭头_列表展开.png);
 border-image: url(:/img/icon/箭头_列表展开.png);}
 QDoubleSpinBox::down-button::hover{
 background:rgba(200, 200, 200,100);
@@ -1011,6 +1023,7 @@ border-image: url(:/img/icon/箭头_列表展开.png);}
 
 QDoubleSpinBox::up-button{
 background:rgba(200, 200, 200,0);
+	image: url(:/icons/icons/箭头_列表收起.png);
 border-image: url(:/img/icon/箭头_列表收起.png);}
 QDoubleSpinBox::up-button::hover{
 background:rgba(200, 200, 200,100);
@@ -1124,16 +1137,16 @@ QCheckBox
 color: rgb(218, 218, 218);;}
 
 QCheckBox::indicator {
+	image: url(:/icons/icons/button-on.png);
 	width: 20px;
 	height: 20px;
 }
 QCheckBox::indicator:unchecked {
-    image: url(:/img/icon/button-off.png);
+  
 }
 
 QCheckBox::indicator:checked {
 
-    image: url(:/img/icon/button-on.png);
 }
 </string>
                   </property>
@@ -1182,12 +1195,15 @@ border-radius: 3px;}
 
 QSpinBox::down-button{
 background:rgba(200, 200, 200,0);
+	
+	image: url(:/icons/icons/箭头_列表展开.png);
 border-image: url(:/img/icon/箭头_列表展开.png);}
 QDoubleSpinBox::down-button::hover{
 background:rgba(200, 200, 200,100);
 border-image: url(:/img/icon/箭头_列表展开.png);}
 
 QSpinBox::up-button{
+	image: url(:/icons/icons/箭头_列表收起.png);
 background:rgba(200, 200, 200,0);
 border-image: url(:/img/icon/箭头_列表收起.png);}
 QSpinBox::up-button::hover{
@@ -1311,16 +1327,17 @@ QCheckBox
 color: rgb(218, 218, 218);;}
 
 QCheckBox::indicator {
+	image: url(:/icons/icons/button-on.png);
 	width: 20px;
 	height: 20px;
 }
 QCheckBox::indicator:unchecked {
-    image: url(:/img/icon/button-off.png);
+    
+	
 }
 
 QCheckBox::indicator:checked {
 
-    image: url(:/img/icon/button-on.png);
 }
 </string>
                  </property>
@@ -1703,6 +1720,8 @@ color: rgb(218, 218, 218);
                </property>
                <property name="styleSheet">
                 <string notr="true">color: rgb(218, 218, 218);
+
+
 </string>
                </property>
                <property name="text">
@@ -1735,6 +1754,7 @@ color: rgb(218, 218, 218);
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton {
+	image: url(:/icons/icons/运行.png);
 border-style: solid;
 border-width: 0px;
 border-radius: 0px;
@@ -1751,7 +1771,7 @@ background-color: rgba(223, 223, 223, 150);}</string>
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../apprcc.qrc">
+                 <iconset>
                   <normaloff>:/img/icon/运行.png</normaloff>
                   <normalon>:/img/icon/暂停.png</normalon>
                   <disabledoff>:/img/icon/运行.png</disabledoff>
@@ -1805,6 +1825,7 @@ QProgressBar:chunk{ border-radius:0px; background: rgba(55, 55, 55, 200);}</stri
                 </property>
                 <property name="styleSheet">
                  <string notr="true">QPushButton {
+image: url(:/icons/icons/终止.png);
 border-style: solid;
 border-width: 0px;
 border-radius: 0px;
@@ -1812,6 +1833,7 @@ background-color: rgba(223, 223, 223, 0);
 }
 QPushButton::focus{outline: none;}
 QPushButton::hover {
+	
 border-style: solid;
 border-width: 0px;
 border-radius: 0px;
@@ -1821,7 +1843,7 @@ background-color: rgba(223, 223, 223, 150);}</string>
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../apprcc.qrc">
+                 <iconset>
                   <normaloff>:/img/icon/终止.png</normaloff>:/img/icon/终止.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -1883,6 +1905,7 @@ border-radius:0px;}</string>
             <property name="styleSheet">
              <string notr="true">QLabel
 {
+
 	font-size: 16px;
 	font-family: &quot;Microsoft YaHei&quot;;
 	font-weight: light;
@@ -1914,7 +1937,216 @@ color: rgb(218, 218, 218);
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../apprcc.qrc"/>
+  <include location="res.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>closeButton</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>22</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minButton</sender>
+   <signal>clicked()</signal>
+   <receiver>minButton</receiver>
+   <slot>showMinimized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>602</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>602</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>683</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>405</x>
+     <y>8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox_3</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>672</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>538</x>
+     <y>82</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>raw_video</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>671</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>463</x>
+     <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>out_video</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>674</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>640</x>
+     <y>156</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox_201</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>677</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>90</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox_2</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>673</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>236</x>
+     <y>78</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox_201</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>682</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>325</x>
+     <y>92</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>statistic_label</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>690</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>456</x>
+     <y>530</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox_8</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>683</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>241</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox_4</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>690</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>535</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>groupBox_201</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>685</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>435</x>
+     <y>93</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
