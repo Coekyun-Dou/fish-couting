@@ -16,6 +16,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMenu, QAction
 from PyQt5.QtCore import Qt, QPoint, QTimer, QThread, pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap, QPainter, QIcon, QPalette, QBrush
+#Qt资源已经全部引用
 import sys
 import json
 import numpy as np
@@ -1352,6 +1353,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                 self.runButton.setChecked(False)
                 break
         print("t2 close")
+
     def getDetection(self,img,model):
         im3 = img.copy()
         device = torch.device("cuda")
@@ -1404,6 +1406,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
         return im0
 
 
+        # ------ reading line-----------
     def srceendetect(self):
         global x0, y0, x1, y1 , tclose, truning
         if truning:
