@@ -9,7 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import res_rc
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QDialog, QPushButton, QLabel, QMainWindow, QWidget, QMessageBox
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -156,4 +159,4 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "         广东海洋大学AI应用创新创业团队"))
         self.lineEdit.setPlaceholderText(_translate("MainWindow", "账号："))
         self.lineEdit_2.setPlaceholderText(_translate("MainWindow", "密码："))
-import res_rc
+

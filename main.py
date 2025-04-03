@@ -1406,7 +1406,6 @@ class MainWindow(QMainWindow, Ui_mainWindow):
         return im0
 
 
-        # ------ reading line-----------
     def srceendetect(self):
         global x0, y0, x1, y1 , tclose, truning
         if truning:
@@ -1428,6 +1427,8 @@ class MainWindow(QMainWindow, Ui_mainWindow):
         t1.start()
         t2 = threading.Thread(target=self.yolov5Detect, args=())
         t2.start()
+
+# ------ reading line-----------
 
     def search_pt(self):
         pt_list = os.listdir('./pt')

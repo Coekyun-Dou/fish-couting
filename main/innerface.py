@@ -43,8 +43,8 @@ import time
 import cv2
 import cv2 as CV2
 
+
 from MouseLabel import Label_click_Mouse
-from main_win.wrjGPS import wrjGPS
 from models.experimental import attempt_load
 from test.captureScreen import boxScreen
 from utils.augmentations import letterbox
@@ -67,6 +67,104 @@ img_src = cv2.imread('F:\science_study\sea win eletronic detect\data\selfCreate\
 tclose=False
 truning=False
 tsleep=False
+
+class YOLOv8Detector:
+    def __init__(self, conf=0.25, iou=0.45):
+        self.model = None
+        self.conf = conf
+        self.iou = iou
+        self.class_names = []
+        np.random.seed(42)  # 固定颜色生成
+
+    def init_model(self, model_path):
+        """ 初始化YOLOv8模型 """
+        self.model = YOLO(model_path)
+        self.model.fuse()
+        self.class_names = list(self.model.names.values())
+        self.COLORS = np.random.uniform(0, 255, size=(len(self.class_names), 3))
+
+    def detect(self, img):
+        """ 执行检测并返回带标注图像和统计信息 """
+        results = self.model.predict(
+            source=img,
+            imgsz=640,
+            conf=self.conf,
+            iou=self.iou,
+            device='cpu',
+            verbose=False
+        )
+        return self._parse_results(img, results[0])
+
+    def _parse_results(self, orig_img, results):
+        """ 解析检测结果 """
+        # 获取检测框数据
+        boxes = results.boxes.cpu().numpy()
+
+        # 生成统计字典
+        statistic_dic = {name: 0 for name in self.class_names}
+        for box in boxes:
+            cls_id = int(box.cls[0])
+            statistic_dic[self.class_names[cls_id]] += 1
+
+        # 生成带标注图像（两种方式）
+        # 方式1：使用YOLOv8内置绘图方法（快速）
+        # annotated_img = results.plot()
+
+        # 方式2：自定义绘制（更灵活）
+        annotated_img = orig_img.copy()
+        for box in boxes:
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            cls_id = int(box.cls[0])
+            conf = box.conf[0]
+            self._draw_box(annotated_img, x1, y1, x2, y2,
+                           self.class_names[cls_id], conf, cls_id)
+
+        return annotated_img, statistic_dic
+
+    def _draw_box(self, img, x1, y1, x2, y2, label, conf, cls_id):
+        """ 自定义绘制检测框 """
+        color = self.COLORS[cls_id % len(self.COLORS)].tolist()
+        # 绘制矩形框
+        cv2.rectangle(img, (x1, y1), (x2, y2), color, 3)
+        # 绘制标签背景
+        (tw, th), _ = cv2.getTextSize(f"{label} {conf:.2f}",
+                                      cv2.FONT_HERSHEY_SIMPLEX, 0.8, 2)
+        cv2.rectangle(img, (x1, y1 - th - 10), (x1 + tw, y1 - 10), color, -1)
+        # 绘制文字
+        cv2.putText(img, f"{label} {conf:.2f}", (x1, y1 - 15),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+
+
+class DetThread(QThread):
+    send_img = pyqtSignal(np.ndarray)  # 带标注图像
+    send_raw = pyqtSignal(np.ndarray)  # 原始图像
+    send_statistic = pyqtSignal(dict)  # 统计信息
+
+    def __init__(self):
+        super().__init__()
+        self.detector = YOLOv8Detector()  # 替换为YOLOv8检测器
+        self.source = '0'  # 视频源
+        self.conf = 0.25
+        self.iou = 0.45
+
+    def run(self):
+        # 初始化检测器
+        self.detector.conf = self.conf
+        self.detector.iou = self.iou
+        self.detector.init_model('./pt/yolov8_model.pt')  # 修改模型路径
+
+        cap = cv2.VideoCapture(self.source)
+        while True:
+            ret, frame = cap.read()
+            if not ret: break
+
+            # 执行YOLOv8检测
+            annotated_img, statistic = self.detector.detect(frame)
+
+            # 发送信号
+            self.send_raw.emit(frame)  # 原始帧
+            self.send_img.emit(annotated_img)  # 带标注帧
+            self.send_statistic.emit(statistic)  # 统计信息
 
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
@@ -1268,89 +1366,525 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                         break
                 print("t1 close")
         #使用yolov5模型进行图像检测，并在一个OpenCV窗口显示检测结果
-        def yolov5Detect(self):
-                global tclose, truning #tclose 用于控制检测的终止，truning 用于标记检测是否正在进行中
-                #OpenCV窗口设置
-                CV2.namedWindow("detectWindow", CV2.WINDOW_NORMAL)
-                CV2.resizeWindow("detectWindow", x1 - x0, y1 - y0)
-                CV2.moveWindow("detectWindow", 600, 600)
-                #加载YOLOv5模型
-                device = select_device('cpu')#如果要用GPU改成cuda就可以了
-                model = attempt_load('./pt/yolov5CW.pt', map_location=device) #加载已经训练好的模型
-                #启动检测
-                truning = True #检测开始
-                #循环暂停检测直到rsleep为false；如果tsleep为true程序会休眠1s
-                while True:
-                        while tsleep:
-                                time.sleep(1)
-                #获取图像并进行检测
-                        img = img_src.copy() #复制一个截图数据（img_src是一个全局变量）
-                        im0 = self.getDetection(img, model) #传入图像和模型，返回检测后的图像im0
-                        CV2.imshow("detectWindow", im0)  #使用openCV来显示检测后的图像，显示在detectWindow窗口中
-                        #检查退出条件
-                        if (CV2.waitKey(1) & 0xFF == ord("q")) | tclose: #如果按下了q或 tclose 为 True，则销毁所有 OpenCV 窗口，停止检测任务，设置 tclose = True 和 truning = False，并更新 runButton 的状态
-                                # 就会销毁窗口并退出循环，否则继续下一次循环。
-                                CV2.destroyAllWindows()
-                                tclose = True
-                                truning = False
-                                self.runButton.setChecked(False)
-                                break
-                #打印检测日志
-                print("t2 close")
-#------做个标记，明天继续完善
-        def getDetection(self, img, model):
+        # def yolov5Detect(self):
+        #         global tclose, truning #tclose 用于控制检测的终止，truning 用于标记检测是否正在进行中
+        #         #OpenCV窗口设置
+        #         CV2.namedWindow("detectWindow", CV2.WINDOW_NORMAL)
+        #         CV2.resizeWindow("detectWindow", x1 - x0, y1 - y0)
+        #         CV2.moveWindow("detectWindow", 600, 600)
+        #         #加载YOLOv5模型
+        #         device = select_device('cpu')#如果要用GPU改成cuda就可以了
+        #         model = attempt_load('./pt/yolov5CW.pt', map_location=device) #加载已经训练好的模型
+        #         #启动检测
+        #         truning = True #检测开始
+        #         #循环暂停检测直到rsleep为false；如果tsleep为true程序会休眠1s
+        #         while True:
+        #                 while tsleep:
+        #                         time.sleep(1)
+        #         #获取图像并进行检测
+        #                 img = img_src.copy() #复制一个截图数据（img_src是一个全局变量）
+        #                 im0 = self.getDetection(img, model) #传入图像和模型，返回检测后的图像im0
+        #                 CV2.imshow("detectWindow", im0)  #使用openCV来显示检测后的图像，显示在detectWindow窗口中
+        #                 #检查退出条件
+        #                 if (CV2.waitKey(1) & 0xFF == ord("q")) | tclose: #如果按下了q或 tclose 为 True，则销毁所有 OpenCV 窗口，停止检测任务，设置 tclose = True 和 truning = False，并更新 runButton 的状态
+        #                         # 就会销毁窗口并退出循环，否则继续下一次循环。
+        #                         CV2.destroyAllWindows()
+        #                         tclose = True
+        #                         truning = False
+        #                         self.runButton.setChecked(False)
+        #                         break
+        #         #打印检测日志
+        #         print("t2 close")
+        #图像处理函数，用深度学习模型来检测图像中的对象，将检测结果可视化
+        def getDetection(self, img, model):#输入参数：img表示输入图像（numpy数组，表示一张图片）；model，yolo模型
                 im3 = img.copy()
-                device = torch.device("cuda")
-                half = False
+                #设备设置
+                device = torch.device("cuda")#用GPU
+                half = False    #half 变量指示是否使用半精度浮点数
                 augment = False
-                half &= device.type != 'cpu'
-                img0 = cv2.flip(img, 1)  # flip left-right
-                img = letterbox(img0, 640, 32)[0]
-                img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+                half &= device.type != 'cpu' #如果设备是GPU，那么half会设置为true，否则为false
+                img0 = cv2.flip(img, 1)  # 图像左右翻转
+                img = letterbox(img0, 640, 32)[0] #缩放图像
+                img = img.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB转成模型需要输入的格式
                 img = np.ascontiguousarray(img)
-
-                img = torch.from_numpy(img).to(device)
-                img = img.half() if half else img.float()  # uint8 to fp16/32
+                #将图像转换为PyTorch张量
+                img = torch.from_numpy(img).to(device) #转成torch张量，传到设备上
+                img = img.half() if half else img.float()  # uint8 to fp16/32 转成float16
+                #归一化：将像素值从0-255转到0-1之间
                 img /= 255.0  # 0 - 255 to 0.0 - 1.0
+                #模型推理
+                # 如果图像的维度为 3（即单张图像），则为其添加一个 batch 维度
                 if img.ndimension() == 3:
                         img = img.unsqueeze(0)
-
+                #将图像输入到目标检测模型中，进行推理得到预测结果
                 pred = model(img, augment=augment)[0]
-                classes = None
-                agnostic_nms = False
-                hide_labels = False
-                hide_conf = False
-                max_det = 1000
-                iou = 0.3
-                conf = 0.3
-                a = model.module.names if hasattr(model, 'module') else model.names  # get class names
-                names = list(a.values())
+                #设置目标检测的参数
+                classes = None #指定要检测的类别，如果为None，意味着模型将检测所有类别
+                agnostic_nms = False #一个标志位，表示是否使用类别无关的非极大值抑制（NMS）。如果设置为 True，NMS将不会考虑不同类别的目标，而是会将不同类别的框进行合并。如果是 False，则NMS会按照类别分别进行
+                hide_labels = False #是否隐藏目标框上的标签。 false 则会显示标签
+                hide_conf = False #是否隐藏置信度
+                max_det = 1000 #设置模型在一张图像中最多能检测到多少个目标
+                iou = 0.3 #iou（Intersection over Union，交并比）是一个阈值，决定了哪些检测框可以被认为是重复的。当两个框的 IOU 大于这个阈值时，后者的框会被抑制。
+                conf = 0.3 #conf（置信度）是一个阈值，表示只有置信度大于这个值的检测框才会被保留。通常，只有高置信度的检测框才是可靠的目标。
+                a = model.module.names if hasattr(model, 'module') else model.names  # 检查模型是否使用了 DataParallel（即多GPU训练模式）。如果是，它会从 model.module.names 获取类别名称；如果不是，则直接从 model.names 获取类别名称。
+                #model.names 是模型类别名称的字典，用来标识每个类别的名称
+                names = list(a.values()) #将类别名称从字典转换为列表，names 现在是一个包含所有类别名称的列表。这个列表将在后续的处理过程中用来显示检测框的标签。
                 statistic_dic = {name: 0 for name in names}
+                #创建了一个统计字典 statistic_dic，用来记录每个类别的检测数量。字典的键是类别名称，值是初始的计数（0）
+                #一个ui小组件，用于用户选择iou个conf
                 iou = self.iouSpinBox.value()
                 conf = self.confSpinBox.value()
+                #后处理：使用非极大值抑制（NMS）来过滤掉重复的检测框：
                 pred = non_max_suppression(pred, conf, iou, classes, agnostic_nms,
                                            max_det=max_det)
-                bboxes = []
-                for i, det in enumerate(pred):  # detections per image
-                        annotator = Annotator(im3, line_width=3, example=str(names))
+                bboxes = [] #创建一个空列表用来存储边界框
+                for i, det in enumerate(pred):  # 对pred中的每个预测进行遍历，i是当前处理的图像索引，det是当前图像的检测结果
+                        annotator = Annotator(im3, line_width=3, example=str(names))    #创建一个Annotator对象，im3 是当前处理的图像，line_width=3 设置了绘制边界框时线条的宽度
+                        #检查有没有物体，有的话（det不为空）执行以下操作
                         if len(det):
-                                # Rescale boxes from img_size to im0 size
+                                # 将边界框的坐标缩放到适合网络的尺寸
                                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im3.shape).round()
 
-                                # Write results
+                                #书写结果
                                 for *xyxy, conf, cls in reversed(det):
-                                        c = int(cls)  # integer class
-                                        statistic_dic[names[c]] += 1
+                                        c = int(cls)  # 将类被索引cls转换成整数类型
+                                        statistic_dic[names[c]] += 1 #更新statistic_dic字典，记录检测到的次数
                                         label = None if hide_labels else (
-                                                names[c] if hide_conf else f'{names[c]} {conf:.2f}')
-                                        annotator.box_label(xyxy, label, color=colors(c, True))
-                im0 = annotator.result()
-                self.det_thread.send_statistic.emit(statistic_dic)
-                self.det_thread.send_img.emit(im0)
+                                                names[c] if hide_conf else f'{names[c]} {conf:.2f}') #根据上面的参数，决定要不要隐藏标签和置信度
+                                        annotator.box_label(xyxy, label, color=colors(c, True)) #绘制边界和标签
+                im0 = annotator.result() #绘制结果图像im0
+                self.det_thread.send_statistic.emit(statistic_dic) #将更新后的统计信息发送给其他线程或模块进行处理
+                self.det_thread.send_img.emit(im0) #将im0发送欸其他线程或模块显示或保存
                 self.det_thread.send_raw.emit(im3 if isinstance(im3, np.ndarray) else im3[0])
                 return im0
+        #在程序中截取屏幕截图，并且触发其他两个线程进行后续处理。
+        def srceendetect(self):
+                global x0, y0, x1, y1, tclose, truning
+                if truning:
+                        tclose = True #关闭标志，用于进程终止控制
+                with mss.mss() as sct:
+                        # 获取屏幕信息
+                        monitor = sct.monitors[1]  # 如果您有多个显示器，请根据实际情况选择要截取的显示器索引
+                        # 获取屏幕截图
+                        screenshot = np.array(sct.grab(monitor)) #将截图保存为 numpy 数组，以便进行后续的图像处理
+                x0, y0, x1, y1 = boxScreen(screenshot) #用boxScreen函数处理截图并返回一个矩形区域
+                source = 'screenCapture' #定义截图来源名称为‘screenCapture’
+                self.statistic_msg('Detecting >> model：{}，file：{}'.
+                                   format(os.path.basename(self.det_thread.weights),
+                                          source))
+                self.runButton.setChecked(True) #将一个名为runbutton的按钮状态设置为true
 
+                tclose = False
+                t1 = threading.Thread(target=self.getMonitor, args=()) #创建一个进程来之心getMonitor方法
+                t1.start() #启动上面的进程
+                t2 = threading.Thread(target=self.yolov5Detect, args=()) #创建另一个线程来执行yolov5Detect方法
+                t2.start() #启动上面的进程
+        #搜索并列出文件夹里面所有pt文件，并排列更新到comboBox中
+        def search_pt(self):
+                pt_list = os.listdir('./pt') #列出要搜索的工作目录pt
+                pt_list = [file for file in pt_list if file.endswith('.pt')]   #从所有的文件中筛选出pt文件，
+                pt_list.sort(key=lambda x: os.path.getsize('./pt/' + x)) #按照文件大小排序
+                # 更新pt_list和下拉框
+                if pt_list != self.pt_list:
+                        self.pt_list = pt_list
+                        self.comboBox.clear()
+                        self.comboBox.addItems(self.pt_list)
+        #根据复选框状态决定是否设置一个保存路径，并吧路径赋值给线程对象的save_fold属性
+        def is_save(self):
+                if self.saveCheckBox.isChecked(): #如果复选框被选中，isChecked返回true
+                        self.det_thread.save_fold = './result' #保存到result目录下
+                else:
+                        self.det_thread.save_fold = None #如果复选框没被选中，返回None
+        #根据复选框状态决定是否启用XX功能
+        def checkrate(self):
+                if self.checkBox.isChecked(): #检查复选框是否被选中，选中返回true，没有返回false
+                        self.det_thread.rate_check = True     #若选中，启用某功能
+                else:
+                        self.det_thread.rate_check = False #未选中，禁用该功能
+        #一个弹出窗口，让用户选择或设置一个RTSP视频流的URL,并保存
+        def chose_rtsp(self):
+                self.rtsp_window = Window() #创建一个新的窗口rtsp_window,包含一个用于显示和编辑RTSP地址的输入框和按钮
+                config_file = 'config/ip.json' #指定配置文件的路径
+                if not os.path.exists(config_file): #检查配置文件是否存在
+                        ip = "rtsp://admin:admin888@192.168.1.67:555" #默认的RTSP地址
+                        new_config = {"ip": ip} #创建新字典将默认RTSP地址储存到字典中
+                        new_json = json.dumps(new_config, ensure_ascii=False, indent=2) #将字典new_config转化为格式化的json字符串，并写入文件ip.json
+                        with open(config_file, 'w', encoding='utf-8') as f:
+                                f.write(new_json)
+                else:
+                        config = json.load(open(config_file, 'r', encoding='utf-8'))
+                        ip = config['ip']
+                self.rtsp_window.rtspEdit.setText(ip) #将读取到的RTSP地址设置到窗口中的输入框rtspEdit中
+                self.rtsp_window.show() #显示RTSP设置窗口
+                self.rtsp_window.rtspButton.clicked.connect(lambda: self.load_rtsp(self.rtsp_window.rtspEdit.text())) #连接按钮的点击事件
+        #用来处理用户界面不同空间传入的flag参数，进行更新操作。
+        def change_val(self, x, flag):
+                if flag == 'confSpinBox':
+                        self.confSlider.setValue(int(x * 100))
+                elif flag == 'confSlider':
+                        self.confSpinBox.setValue(x / 100)
+                        self.det_thread.conf_thres = x / 100
+                elif flag == 'iouSpinBox':
+                        self.iouSlider.setValue(int(x * 100))
+                elif flag == 'iouSlider':
+                        self.iouSpinBox.setValue(x / 100)
+                        self.det_thread.iou_thres = x / 100
+                elif flag == 'rateSpinBox':
+                        self.rateSlider.setValue(x)
+                elif flag == 'rateSlider':
+                        self.rateSpinBox.setValue(x)
+                        self.det_thread.rate = x * 10
+                else:
+                        pass
+        #更新界面上的一个标签（statistic_label)内的文本，显示传入的消息msg
+        def statistic_msg(self, msg):
+                self.statistic_label.setText(msg)
+                # self.qtimer.start(3000)
+        #在GUI中展示一条消息，并根据消息内容执行一些其他操作
+        def show_msg(self, msg):
+                self.runButton.setChecked(Qt.Unchecked)
+                self.statistic_msg(msg)
+                if msg == "Finished":
+                        self.saveCheckBox.setEnabled(True)
+        #根据用户选择的模型类型来更新路径
+        def change_model(self, x):
+                self.model_type = self.comboBox.currentText()
+                self.det_thread.weights = "./pt/%s" % self.model_type
+                self.statistic_msg('Change model to %s' % x)
+        #一个打开文件选择对话框，用户选择一个视频或图像文件，并将所选文件路径存储到程序中，同时更新程序配置文件
+        def open_file(self):
 
+                config_file = 'config/fold.json' #定义了一个字符串，表示配置文件的路径。用于保存程序的设置。
+                # config = json.load(open(config_file, 'r', encoding='utf-8'))
+                config = json.load(open(config_file, 'r', encoding='utf-8'))
+                open_fold = config['open_fold'] #从config字典中获取open_fold键的值
+                if not os.path.exists(open_fold):
+                        open_fold = os.getcwd()
+                name, _ = QFileDialog.getOpenFileName(self, 'Video/image', open_fold,
+                                                      "Pic File(*.mp4 *.mkv *.avi *.flv "
+                                                      "*.jpg *.png)")
+                if name: #如果用户选择了文件（即name不为空）执行以下代码
+                        self.det_thread.source = name
+                        self.statistic_msg('Loaded file：{}'.format(os.path.basename(name)))
+                        config['open_fold'] = os.path.dirname(name)
+                        config_json = json.dumps(config, ensure_ascii=False, indent=2)
+                        with open(config_file, 'w', encoding='utf-8') as f:
+                                f.write(config_json)
+                        self.stop()
+        # 根据某个按钮的状态来决定窗口的显示方式
+        def max_or_restore(self):
+                if self.maxButton.isChecked():  #检查maxButton是否被选中
+                        self.showMaximized() #最大化
+                else:
+                        self.showNormal()
+        #根据按钮状态来控制某些操作的执行
+        def run_or_continue(self):
+            global tsleep
+            self.det_thread.jump_out = False #让det_thread进程不会中断或跳出
+            print("1")
+            print(self.runButton.isChecked())
+            print(truning) #打印语句用于调试，输出按钮的状态（是否被勾选）和 truning 的值。
+            if (self.runButton.isChecked() == True) & (truning == False): #如果按钮被勾选的话，开始运行检测任务
+                self.saveCheckBox.setEnabled(False) #禁用 saveCheckBox，即在检测任务运行时不允许更改该复选框的状态。
+                self.det_thread.is_continue = True #表示可以继续检测任务
+                if not self.det_thread.isRunning():
+                    self.det_thread.start()     #如果在运行det_thread的话，启动线程
+                source = os.path.basename(self.det_thread.source) #提取det_thread.source 的文件名，并根据该文件名是否是数字来判断是否将其设置为 'camera'，否则使用原文件名。
+                source = 'camera' if source.isnumeric() else source
+                self.statistic_msg('Detecting >> model：{}，file：{}'. #打印当前检测的模型和文件的相关信息。
+                                   format(os.path.basename(self.det_thread.weights),
+                                          source))
+            else:
+                if ((self.runButton.isChecked() == False) & (truning == True)): #runButton没有被公选，暂停检测任务，打印pause
+                    self.statistic_msg('Pause')
+                    tsleep = True
+                elif ((self.runButton.isChecked() == True) & (truning == True)): #runButton被勾选，继续检测任务，打印相关信息
+                    tsleep = False
+                    source = 'screenCapture'
+                    self.statistic_msg('Detecting >> model：{}，file：{}'.
+                                       format(os.path.basename(self.det_thread.weights),
+                                              source))
+                else: #其他情况下，打印pause信息，表示任务暂停
+                    self.det_thread.is_continue = False
+                    self.statistic_msg('Pause')
+        # 用于停止或中断检测任务，并恢复一些界面元素的状态
+        def stop(self):
+            self.det_thread.jump_out = True #让测试线程中止或退出某个操作
+            self.saveCheckBox.setEnabled(True) #关于复选框设置
+        #事件处理函数，用于处理鼠标点击事件
+        def mousePressEvent(self, event):
+            self.m_Position = event.pos() #获取鼠标点击时的坐标
+            if event.button() == Qt.LeftButton: #判断是不是左键点击
+                if 0 < self.m_Position.x() < self.groupBox.pos().x() + self.groupBox.width() and \
+                        0 < self.m_Position.y() < self.groupBox.pos().y() + self.groupBox.height():
+                    self.m_flag = True #在某处左键点击，设置m_flag = true；
+        #事件处理函数，用于处理鼠标移动事件
+        def mouseMoveEvent(self, QMouseEvent):
+            if Qt.LeftButton and self.m_flag: #是否是鼠标左键 且 m_flag = true
+                self.move(QMouseEvent.globalPos() - self.m_Position) #使窗口可以跟随鼠标移动
+        #事件处理函数，当鼠标按钮被释放时m_flag设为false
+        def mouseReleaseEvent(self, QMouseEvent):
+            self.m_flag = False
 
+        @staticmethod  #将下面的操作标记为静态方式
+        #一个静态方法，，用于在标签上显示一个图像img_src
+        def show_image(img_src, label):
+            try:
+                ih, iw, _ = img_src.shape #获取图像的高度、宽度
+                #下面两行：获取标签的宽度和高度，确保图像能够根据标签的尺寸进行缩放
+                w = label.geometry().width()
+                h = label.geometry().height()
+                # if else 语句负责根据图像的标签和尺寸，按比例缩放图像以适应标签的大小
+                if iw / w > ih / h:
+                    scal = w / iw
+                    nw = w
+                    nh = int(scal * ih)
+                    img_src_ = cv2.resize(img_src, (nw, nh))
 
+                else:
+                    scal = h / ih
+                    nw = int(scal * iw)
+                    nh = h
+                    img_src_ = cv2.resize(img_src, (nw, nh))
 
+                frame = cv2.cvtColor(img_src_, cv2.COLOR_BGR2RGB) #用openCV函数将cv2.cvtcolor将图像从BGR转成RGB颜色格式
+                #将处理后的图像数据转换为 Qt 可显示的 QImage 格式。
+                img = QImage(frame.data, frame.shape[1], frame.shape[0], frame.shape[2] * frame.shape[1],
+                             QImage.Format_RGB888)
+                #将该图像显示在一个 QLabel 控件中。
+                label.setPixmap(QPixmap.fromImage(img))
+            #捕获代码异常
+            except Exception as e:
+                print(repr(e))
+        #用于显示统计数据，通过图形界面控件展示结果（在GUI上展示统计信息）
+        def show_statistic(self, statistic_dic):
+            try:
+                self.resultWidget.clear() #清空resultWidget中的所有内容
+                statistic_dic = sorted(statistic_dic.items(), key=lambda x: x[1], reverse=True) #将传入的字典按照字典的值进行排序
+                statistic_dic = [i for i in statistic_dic if i[1] > 0] #过滤掉值为 0 或更小的项，只保留值大于 0 的统计数据。并生成一个表来储存
+                results = [' ' + str(i[0]) + '：' + str(i[1]) for i in statistic_dic] #生成一个新的列表 results，其中每个元素是一个字符串，表示统计数据的键和值。i[0] 是字典的键，i[1] 是字典的值。
+                self.resultWidget.addItems(results) #将列表中的每一项都添加到resultWidget中
+        #进行异常处理
+            except Exception as e:
+                print(repr(e))
+        #事件处理函数，用于处理窗口关闭的操作
+        def closeEvent(self, event):
+            self.det_thread.jump_out = True #通知某个正在运行的线程停止或退出
+            #配置数据收集
+            config_file = 'config/setting.json'
+            config = dict()
+            config['iou'] = self.confSpinBox.value() #数据输入框SpinBox的值
+            config['conf'] = self.iouSpinBox.value() #数据输入框iouSpinBox的值
+            config['rate'] = self.rateSpinBox.value() #数据输入框rateSpinBox的值
+            config['check'] = self.checkBox.checkState() #复选框的状态，checkState返回一个值表示复选框是否被选中
+            config['savecheck'] = self.saveCheckBox.checkState()
+            config_json = json.dumps(config, ensure_ascii=False, indent=2) #将这些收集的配置项存储在字典config中
+            #配置保存为JSON
+            with open(config_file, 'w', encoding='utf-8') as f:
+                f.write(config_json)
+            #显示关闭提示框
+            MessageBox(
+                self.closeButton, title='Tips', text='Closing the program', time=2000, auto=True).exec_()
+            #退出程序
+            sys.exit(0)
+
+#定义一个DetThread类，继承自Qthread，用于在独立线程中执行检测任务。
+class DetThread(QThread):
+    send_img = pyqtSignal(np.ndarray) #用于传输图像数据
+    send_raw = pyqtSignal(np.ndarray)   #传输原始图像数据
+    send_statistic = pyqtSignal(dict)   #传输统计数据，以字典的形式发送
+    # emit：detecting/pause/stop/finished/error msg
+    send_msg = pyqtSignal(str) #发送字符串消息，可用来通知程序状态或错误信息
+    send_percent = pyqtSignal(int) #传输进度条的百分比
+    send_fps = pyqtSignal(str) #发送帧率信息，用于视频处理或实时检测
+    send_bboxes = pyqtSignal(np.ndarray) #发送边界框数据，通常用于目标检测，标记目标物体在图像中的位置
+    #初始化类：DetThread
+    def __init__(self):
+        super(DetThread, self).__init__() #调用父类QThread的构造函数，确保继承自QThread的类可以正确初始化
+        #Ps：QThread 是 PyQt 的一个线程类，继承它后可以在后台线程中执行任务。
+        # 指定YOLOv5模型的权重文件
+        self.weights = './pt/yolov5CW.pt'
+        self.current_weight = './pt/yolov5CW.pt'
+        #指定了输入数据源，‘0’表示默认摄像头
+        self.source = '0'
+        #置信度阈值设置为0.25
+        self.conf_thres = 0.25
+        #交并比IoU设置为0.45
+        self.iou_thres = 0.45
+        #标志变量，默认为False，检测继续进行；如果设置为true，检测任务会跳出或停止
+        self.jump_out = False  # jump out of the loop
+        self.is_continue = True  # continue/pause
+        #设置进度条长度
+        self.percent_length = 1000  # progress bar
+        #控制是否启用延迟检查
+        self.rate_check = True  # Whether to enable delay
+        #与任务的执行速率或延迟相关
+        self.rate = 100
+        #设置保存路径
+        self.save_fold = './result'
+
+    @torch.no_grad()
+    #改装饰器使得在推理过程中禁用梯度计算，从而提高推理效率，并节省内存
+    def run(self,
+            imgsz=640,  # 输入图像尺寸
+            max_det=1000,  # 最多放1000张图片
+            device='cpu',  # 用cpu或者gpu来检测
+            view_img=True,  # 显示结果，以图像形式弹出
+            save_txt=False,  # 检测结果保存为txt
+            save_conf=False,  # 在txt标签文件中保存每个目标的置信度分数
+            save_crop=False,  # 保存目标检测的裁剪框
+            nosave=False,  # false表示保存检测结果
+            classes=None,  # 可以设置只关心识别的类别，none表示全关心
+            agnostic_nms=False,  # 是否使用NMS
+            augment=False,  # 是否进行增强推理
+            visualize=False,  # 是否可视化模型的特征图
+            update=False,  # 是否更新模型
+            project='runs/detect',  # 结果保存路径
+            name='exp',  # 实验/项目的名称，保留在project/name目录下。默认是exp
+            exist_ok=False,  # 出错时抛出错误，如果为true，会直接覆盖文件
+            line_thickness=3,  # 边界框的线条粗细，单位为像素
+            hide_labels=False,  # 是否隐藏标签
+            hide_conf=False,  # 是否隐藏目标的置信度
+            half=False,  # 是否使用半精度浮点数进行推理
+            ):
+
+        # Initialize
+        try:
+            device = select_device(device) #选择设备
+            half &= device.type != 'cpu'  # half precision only supported on CUDA
+
+            # 加载模型
+            model = attempt_load(self.weights, map_location=device)  # load FP32 model
+            num_params = 0
+            for param in model.parameters():
+                num_params += param.numel()
+            stride = int(model.stride.max())  # model stride
+            imgsz = check_img_size(imgsz, s=stride)  # check image size
+            a = model.module.names if hasattr(model, 'module') else model.names  # get class names
+            print(a)
+            names = list(a.values())
+            print(names)
+            if half:
+                model.half()  # to FP16
+
+            # Dataloader
+            if self.source.isnumeric() or self.source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://')):
+                view_img = check_imshow()
+                cudnn.benchmark = True  # set True to speed up constant image size inference
+                dataset = LoadWebcam(self.source, img_size=imgsz, stride=stride)
+                # bs = len(dataset)  # batch_size
+            else:
+                dataset = LoadImages(self.source, img_size=imgsz, stride=stride)
+
+            # Run inference
+            if device.type != 'cpu':
+                model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
+            count = 0
+            jump_count = 0
+            start_time = time.time()
+            dataset = iter(dataset)
+
+            while True:
+                if self.jump_out:
+                    self.vid_cap.release()
+                    self.send_percent.emit(0)
+                    self.send_msg.emit('Stop')
+                    if hasattr(self, 'out'):
+                        self.out.release()
+                    break
+                # change model
+                if self.current_weight != self.weights:
+                    # 加载模型
+                    model = attempt_load(self.weights, map_location=device)  # 通过这句代码来加载预训练模型
+                    num_params = 0
+                    for param in model.parameters():
+                        num_params += param.numel()
+                    stride = int(model.stride.max())  # model stride
+                    imgsz = check_img_size(imgsz, s=stride)  # check image size
+                    names = model.module.names if hasattr(model, 'module') else model.names  # get class names
+                    if half:
+                        model.half()  # to FP16
+                    # Run inference
+                    if device.type != 'cpu':
+                        model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(next(model.parameters())))  # run once
+                    self.current_weight = self.weights
+                if self.is_continue:
+                    path, img, im0s, self.vid_cap = next(dataset)
+                    # jump_count += 1
+                    # if jump_count % 5 != 0:
+                    #     continue
+                    count += 1
+                    if count % 30 == 0 and count >= 30:
+                        fps = int(30 / (time.time() - start_time))
+                        self.send_fps.emit('fps：' + str(fps))
+                        start_time = time.time()
+                    if self.vid_cap:
+                        percent = int(count / self.vid_cap.get(cv2.CAP_PROP_FRAME_COUNT) * self.percent_length)
+                        self.send_percent.emit(percent)
+                    else:
+                        percent = self.percent_length
+
+                    statistic_dic = {name: 0 for name in names}
+                    img = torch.from_numpy(img).to(device)
+                    img = img.half() if half else img.float()  # uint8 to fp16/32
+                    img /= 255.0  # 0 - 255 to 0.0 - 1.0
+                    if img.ndimension() == 3:
+                        img = img.unsqueeze(0)
+
+                    pred = model(img, augment=augment)[0]
+
+                    # Apply NMS
+                    pred = non_max_suppression(pred, self.conf_thres, self.iou_thres, classes, agnostic_nms,
+                                               max_det=max_det)
+                    # Process detections
+                    for i, det in enumerate(pred):  # detections per image
+                        im0 = im0s.copy()
+                        annotator = Annotator(im0, line_width=line_thickness, example=str(names))
+                        if len(det):
+                            # Rescale boxes from img_size to im0 size
+                            det[:, :4] = scale_coords(img.shape[2:], det[:, :4], im0.shape).round()
+
+                            # Write results
+                            for *xyxy, conf, cls in reversed(det):
+                                c = int(cls)  # integer class
+                                statistic_dic[names[c]] += 1
+                                label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
+                                annotator.box_label(xyxy, label, color=colors(c, True))
+
+                    if self.rate_check:
+                        time.sleep(1 / self.rate)
+                    im0 = annotator.result()
+                    self.send_img.emit(im0)
+                    self.send_raw.emit(im0s if isinstance(im0s, np.ndarray) else im0s[0])
+                    self.send_statistic.emit(statistic_dic)
+                    if self.save_fold:
+                        os.makedirs(self.save_fold, exist_ok=True)
+                        if self.vid_cap is None:
+                            save_path = os.path.join(self.save_fold,
+                                                     time.strftime('%Y_%m_%d_%H_%M_%S',
+                                                                   time.localtime()) + '.jpg')
+                            cv2.imwrite(save_path, im0)
+                        else:
+                            if count == 1:
+                                ori_fps = int(self.vid_cap.get(cv2.CAP_PROP_FPS))
+                                if ori_fps == 0:
+                                    ori_fps = 25
+                                # width = int(self.vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+                                # height = int(self.vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+                                width, height = im0.shape[1], im0.shape[0]
+                                save_path = os.path.join(self.save_fold,
+                                                         time.strftime('%Y_%m_%d_%H_%M_%S', time.localtime()) + '.mp4')
+                                self.out = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*"mp4v"), ori_fps,
+                                                           (width, height))
+                            self.out.write(im0)
+                    if percent == self.percent_length:
+                        print(count)
+                        self.send_percent.emit(0)
+                        self.send_msg.emit('finished')
+                        if hasattr(self, 'out'):
+                            self.out.release()
+                        break
+
+        except Exception as e:
+            print('错误类型是', e.__class__.__name__)
+            print('错误明细是', e)
