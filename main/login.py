@@ -9,12 +9,16 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import res_rc
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QDialog, QPushButton, QLabel, QMainWindow, QWidget, QMessageBox
+import pymysql
 
-class Ui_MainWindow(object):
+class Login(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1021, 726)
@@ -160,3 +164,55 @@ class Ui_MainWindow(object):
         self.lineEdit.setPlaceholderText(_translate("MainWindow", "账号："))
         self.lineEdit_2.setPlaceholderText(_translate("MainWindow", "密码："))
 
+    def showdialog(self):
+        dlg = QDialog()
+        dlg.setWindowTitle("Succeed")
+        dlg.setWindowModality(Qt.ApplicationModal)
+        icon =(QIcon("img/imageonline-co-pngtoicoimage.ico")) # 替换为您实际的图标文件路径
+        dlg.setWindowIcon(icon)
+        # 添加文本信息
+        label = QLabel(dlg)
+        label.setText("登录成功！")
+        label.move(50, 50)
+
+        # 添加确定按钮
+        button = QPushButton('确定', dlg)
+        button.move(50, 80)
+        button.clicked.connect(self.showMainSystem)
+        button.clicked.connect(dlg.close)
+        dlg.exec_()
+
+    def login_button(self):
+        Login_User = self.userName.text()
+        Login_Passwd = self.password.text()
+        if Login_User == 0 or Login_Passwd == '':
+            QMessageBox.information(self, "error", "输入错误")
+        else:
+            conn = pymysql.connect(
+                host='192.168.10.3',  # 连接主机, 默认127.0.0.1
+                user='root',  # 用户名
+                passwd='123456',  # 密码
+                port=3306,  # 端口，默认为3306
+                db='hsfdSystem',  # 数据库名称
+                charset='utf8'  # 字符编码
+            )
+            # 生成游标对象 cursor
+            cursor = conn.cursor()
+            cursor.execute(f"SELECT * FROM `hsfdsystem`.`usertable` WHERE `user`='{Login_User}'")
+            data = cursor.fetchone()
+            if data is None:
+                QMessageBox.information(self, "user is not exist", "用户名不存在")
+            else:
+                if data[1] == Login_Passwd:
+                    self.showdialog()
+                    self.close()
+                else:
+                    QMessageBox.information(self, "password error", "密码错误")
+            cursor.close()  # 关闭游标
+            conn.close()  # 关闭连接
+
+    def showMainSystem(self):
+        # 做好其他窗口后先import进来后就简单调用就ok了
+        from main.innerfaceUi import MainWindow
+        self.w1 = MainWindow()
+        self.w1.show()

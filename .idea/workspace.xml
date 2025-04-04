@@ -5,14 +5,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa29afd4-577d-4903-940a-1d4fdb486439" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/dialog/illustrate.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dialog/rtsp_dialog.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dialog/rtsp_dialog.ui" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dialog/rtsp_win.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/start.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main/_init_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/captureScreen.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/mysql.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/screenPartDetect.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback014.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback019.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback022.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback040.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback121.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback126.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback133.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback137.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback152.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback154.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback169.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback177.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback180.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback182.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback189.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback197.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback323.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback327.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback333.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback354.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback382.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback384.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback391.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback520.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback525.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback533.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback534.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback540.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback541.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback557.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback600.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback614.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback636.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback639.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback642.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback647.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback716.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback718.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback720.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback726.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/innerface.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/innerface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/login.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -44,7 +84,7 @@
     "Python.yolov8_demo.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Duuuzx/fish-couting",
+    "last_opened_file_path": "C:/Users/Duuuzx/fish-couting/testdata",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -55,6 +95,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Duuuzx\fish-couting\testdata" />
       <recent name="C:\Users\Duuuzx\fish-couting" />
       <recent name="C:\Users\Duuuzx\fish-couting\main" />
       <recent name="C:\Users\Duuuzx\fish-couting\models" />
@@ -135,16 +176,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>1333</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
