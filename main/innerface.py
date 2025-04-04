@@ -11,7 +11,6 @@ import threading
 import mss
 # res_rc是qrc文件转成py文件生成的
 # 生成的指令：pyrcc5 your_resources.qrc -o res_rc.py
-import res_rc
 #这个是用来引入DetThread这个进程的
 # class DetThread(threading.Thread):
 #     def __init__(self, model, input_data, output_queue):
@@ -26,23 +25,17 @@ import res_rc
 #         self.output_queue.put(result)  # 将结果放入队列以供主线程使用
 
 
-from PyQt5.QtCore import QResource, Qt, QTimer
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMenu, QAction
-from PyQt5.QtCore import Qt, QPoint, QTimer, QThread, pyqtSignal
-from PyQt5.QtGui import QImage, QPixmap, QPainter, QIcon, QPalette, QBrush
-from MouseLabel import Label_click_Mouse
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5.QtCore import Qt, QTimer, QThread, pyqtSignal
+from PyQt5.QtGui import QImage, QPixmap
 
 import numpy as np
-import sys
 import json
 import torch
 import torch.backends.cudnn as cudnn
-import os
 import time
 import cv2
-import cv2 as CV2
-
 
 from MouseLabel import Label_click_Mouse
 from models.experimental import attempt_load
@@ -50,11 +43,20 @@ from test.captureScreen import boxScreen
 from utils.augmentations import letterbox
 from utils.datasets import LoadImages, LoadWebcam
 from utils.CustomMessageBox import MessageBox
-from utils.general import check_img_size, check_requirements, check_imshow, colorstr, non_max_suppression, \
-    apply_classifier, scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path
+from utils.general import check_img_size, check_imshow, non_max_suppression, \
+    scale_coords
 # from utils.plots import colors, plot_one_box, plot_one_box_PIL
 from utils.torch_utils import select_device
 from dialog.rtsp_win import Window
+from ultralytics import YOLO
+
+import sys
+import os
+
+# 将 dialog 目录添加到 sys.path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'dialog'))
+
+# 现在可以导入 apprcc_rc
 
 
 img_src = np.zeros((1280, 720, 3), np.uint8)
@@ -63,7 +65,7 @@ COLORS = [
     (255, 0, 255), (192, 192, 192), (128, 128, 128), (128, 0, 0),
     (128, 128, 0), (0, 128, 0)]
 LABELS = ['fish']
-img_src = cv2.imread('F:\science_study\sea win eletronic detect\data\selfCreate\images\\40.jpg') #指向OpenCv对象
+img_src = cv2.imread('C:\\Users\\Duuuzx\\fish-couting\\testdata\\CS_videoplayback014.png') #指向OpenCv对象
 tclose=False
 truning=False
 tsleep=False
@@ -167,7 +169,7 @@ class DetThread(QThread):
             self.send_statistic.emit(statistic)  # 统计信息
 
 class Ui_mainWindow(object):
-    def setupUi(self, mainWindow):
+    def setup_Ui(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
         mainWindow.resize(1085, 808)
         mainWindow.setMouseTracking(True)
@@ -1242,7 +1244,7 @@ class Ui_mainWindow(object):
         self.closeButton.clicked.connect(self.groupBox_201.close) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
-    def retranslateUi(self, mainWindow):
+    def retranslate_Ui(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "基于YOLOv8的水下鱼类计数系统"))
         self.label_4.setText(_translate("mainWindow", "YOLOv8 GUI"))
@@ -1263,6 +1265,7 @@ class Ui_mainWindow(object):
         self.saveCheckBox.setText(_translate("mainWindow", "save automatically"))
         self.label_11.setText(_translate("mainWindow", "result statistics"))
         self.label_6.setText(_translate("mainWindow", "view"))
+
 class MainWindow(QMainWindow, Ui_mainWindow):
         #一个初始化函数
         def __init__(self, parent=None):
@@ -1318,9 +1321,9 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                 self.det_thread.send_percent.connect(lambda x: self.progressBar.setValue(x))
                 self.det_thread.send_fps.connect(lambda x: self.fps_label.setText(x))
                 #按钮时间连接
-                self.screenButton.clicked.connect(self.srceendetect)
+                self.runButton.clicked.connect(self.srceendetect)
                 self.fileButton.clicked.connect(self.open_file)#选择文件
-                self.cameraButton.clicked.connect(self.chose_cam)#选择相机
+                # self.cameraButton.clicked.connect(self.chose_cam)#选择相机 暂时没有self.chose_cam的定义
                 self.rtspButton.clicked.connect(self.chose_rtsp)#选择PTSP流
                 #运行与停止按钮
                 self.runButton.clicked.connect(self.run_or_continue)
@@ -1339,7 +1342,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                 self.checkBox.clicked.connect(self.checkrate)
                 self.saveCheckBox.clicked.connect(self.is_save)
                 #加载之前保存的设置，可能是从文件中读取应用程序的配置或用户的设置。
-                self.load_setting()
+                # self.load_setting()
         #一个控制进程停止并显示finish的函数
         def stopsc(self):
                 global tclose

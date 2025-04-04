@@ -5,55 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa29afd4-577d-4903-940a-1d4fdb486439" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/main/_init_.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/captureScreen.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/mysql.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/screenPartDetect.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback014.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback019.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback022.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback040.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback121.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback126.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback133.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback137.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback152.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback154.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback169.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback177.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback180.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback182.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback189.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback197.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback200.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback323.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback327.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback333.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback354.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback382.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback384.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback391.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback520.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback525.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback533.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback534.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback540.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback541.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback557.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback600.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback614.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback636.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback639.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback642.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback647.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback716.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback718.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback720.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testdata/CS_videoplayback726.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hook-ctypes.macholib.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main/apprcc_rc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main/res_rc.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/start.spec" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/setting.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/setting.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/innerface.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/innerface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/innerfaceUi.ui" beforeDir="false" afterPath="$PROJECT_DIR$/main/innerfaceUi.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/LoginUi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/登录参考.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/start.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/mysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/mysql.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,39 +41,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.main.executor": "Run",
-    "Python.yolov8_demo.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Duuuzx/fish-couting/testdata",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.common.executor&quot;: &quot;Run&quot;,
+    &quot;Python.experimental.executor&quot;: &quot;Run&quot;,
+    &quot;Python.innerface.executor&quot;: &quot;Run&quot;,
+    &quot;Python.login.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mysql.executor&quot;: &quot;Run&quot;,
+    &quot;Python.start.executor&quot;: &quot;Run&quot;,
+    &quot;Python.yolov8_demo.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Duuuzx/fish-couting&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Duuuzx\fish-couting\testdata" />
       <recent name="C:\Users\Duuuzx\fish-couting" />
       <recent name="C:\Users\Duuuzx\fish-couting\main" />
       <recent name="C:\Users\Duuuzx\fish-couting\models" />
+      <recent name="C:\Users\Duuuzx\fish-couting\testdata" />
       <recent name="D:\deeplearning\fish counting" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Duuuzx\fish-couting\main" />
       <recent name="C:\Users\Duuuzx\fish-couting" />
+      <recent name="C:\Users\Duuuzx\fish-couting\dialog" />
       <recent name="C:\Users\Duuuzx\fish-couting\models" />
       <recent name="D:\deeplearning\fish counting" />
-      <recent name="D:\deeplearning\fish counting\icons" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="start" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fish counting" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -123,8 +92,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/start.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -135,7 +103,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
+        <item itemvalue="Python.start" />
       </list>
     </recent_temporary>
   </component>
@@ -176,5 +144,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/models/experimental.py</url>
+          <line>4</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

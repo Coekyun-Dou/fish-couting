@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1085</width>
-    <height>808</height>
+    <width>1081</width>
+    <height>713</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -43,7 +43,8 @@
     <item>
      <widget class="QGroupBox" name="groupBox_18">
       <property name="styleSheet">
-       <string notr="true">#groupBox_18{border-image: url(:D:\\deeplearning\\fish counting\\icons\\fish.jpg);
+       <string notr="true">#groupBox_18{
+	background-image: url(:/images/icons/fish.jpg);
 border: 0px solid #42adff;
 border-radius:5px;}</string>
       </property>
@@ -1941,210 +1942,50 @@ color: rgb(218, 218, 218);
  </resources>
  <connections>
   <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>closeButton</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>22</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>696</x>
-     <y>22</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>minButton</sender>
    <signal>clicked()</signal>
-   <receiver>minButton</receiver>
+   <receiver>mainWindow</receiver>
    <slot>showMinimized()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>602</x>
+     <x>954</x>
+     <y>31</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1080</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>maxButton</sender>
+   <signal>clicked()</signal>
+   <receiver>mainWindow</receiver>
+   <slot>showMaximized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>999</x>
      <y>21</y>
     </hint>
     <hint type="destinationlabel">
-     <x>602</x>
-     <y>21</y>
+     <x>1080</x>
+     <y>9</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>closeButton</sender>
    <signal>clicked()</signal>
-   <receiver>groupBox</receiver>
+   <receiver>mainWindow</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>683</x>
-     <y>20</y>
+     <x>1062</x>
+     <y>19</y>
     </hint>
     <hint type="destinationlabel">
-     <x>405</x>
-     <y>8</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>groupBox_3</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>672</x>
-     <y>22</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>538</x>
-     <y>82</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>raw_video</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>671</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>463</x>
-     <y>176</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>out_video</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>674</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>640</x>
-     <y>156</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>groupBox_201</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>677</x>
-     <y>24</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>346</x>
-     <y>90</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>groupBox_2</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>673</x>
-     <y>32</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>236</x>
-     <y>78</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>groupBox_201</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>682</x>
-     <y>30</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>325</x>
-     <y>92</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>statistic_label</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>690</x>
-     <y>32</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>456</x>
-     <y>530</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>groupBox_8</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>683</x>
-     <y>26</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>241</x>
-     <y>134</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>groupBox_4</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>690</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>3</x>
-     <y>535</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>groupBox_201</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>685</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>435</x>
-     <y>93</y>
+     <x>1080</x>
+     <y>19</y>
     </hint>
    </hints>
   </connection>
