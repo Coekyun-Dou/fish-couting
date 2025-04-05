@@ -16,8 +16,8 @@ if __name__ == "__main__":
     # login.setObjectName("MainWindow")
     # login.setStyleSheet("#MainWindow{border-image:url(img/icon/fish.jpg)}") #设置背景
     # login.setWindowIcon(QIcon("img/imageonline-co-pngtoicoimage.ico"))
-    ui = Login()  # Ui_Form 是由 Qt Designer 转换成的类名
-    ui.setupUi(login_window)  # 在主窗口中设置 UI
+    # ui = Login()  # Ui_Form 是由 Qt Designer 转换成的类名
+    # ui.setupUi(login_window)  # 在主窗口中设置 UI
     login_window.show()
     sys.exit(app.exec_())
 

@@ -22,7 +22,7 @@ class Login(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        # self.setWindowTitle('基于YOLOv8的水下鱼类计数系统')
+        self.setWindowTitle('基于YOLOv8的水下鱼类计数系统')
 
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -83,7 +83,7 @@ class Login(QMainWindow):
         self.pushButton.setStyleSheet("QPushButton{\n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:1, stop:0.188482 rgba(1, 60, 137, 255), stop:1 rgba(255, 255, 255, 255));\n"
 "    color: rgb(255, 255, 255);\n"
-"    boder:none;\n"
+"    border:none;\n"
 "}\n"
 "QPushButton:pressed{\n"
 "    padding-left:5px;\n"
@@ -154,7 +154,7 @@ class Login(QMainWindow):
         self.horizontalLayout.addWidget(self.pushButton_3)
 
         self.retranslateUi(Form)
-        self.pushButton.clicked.connect(self.showdialog)
+        self.pushButton.clicked.connect(self.showMainSystem)
         self.pushButton_3.clicked.connect(Form.close) # type: ignore
         self.pushButton_2.clicked.connect(Form.showMinimized) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -170,44 +170,6 @@ class Login(QMainWindow):
         self.pushButton.setText(_translate("Form", "登录"))
         self.label_8.setText(_translate("Form", "         广东海洋大学AI应用创新团队"))
         self.label_7.setText(_translate("Form", "基于YOLOv8的水下鱼类计数系统"))
-
-    # def login_button_clicked(self):
-    #     username = self.username_input.text()
-    #     password = self.password_input.text()
-    #
-    #     # 假设这里的简单验证是用户名和密码为"admin"
-    #     if username == '123456' and password == '123456':
-    #         self.showMainSystem()  # 登录成功，跳转到主系统
-    #     else:
-    #         self.showdialog()  # 登录失败，弹出提示框
-
-    # def showdialog(self):
-    #     """显示错误信息"""
-    #     from PyQt5.QtWidgets import QMessageBox
-    #     msg = QMessageBox()
-    #     msg.setIcon(QMessageBox.Critical)
-    #     msg.setText("Incorrect username or password!")
-    #     msg.setWindowTitle("Login Failed")
-    #     msg.exec_()
-    #
-    # def showMainSystem(self):
-    #     """跳转到主界面"""
-    #     # self.main_window = QMainWindow()  # 创建主界面窗口
-    #     # self.ui_main = Ui_mainWindow()  # 创建主界面的 UI 实例
-    #     # self.ui_main.setupUi(self.main_window)  # 设置主界面的 UI
-    #     self.main_window.show()  # 显示主界面
-    #     self.close()  # 关闭当前登录界面
-    #     # from main.innerface import Ui_mainWindow
-    #     # from main.innerface import MainWindow
-    #     # Ui_mainWindow()
-    #     # # MainWindow()
-
-    # if __name__ == "__main__":
-    #     app = QApplication([])  # 启动 PyQt 应用
-    #     login_window = Login()  # 创建 Login 界面
-    #     login_window.show()  # 显示登录界面
-    #     app.exec_()  # 启动应用事件循环
-
 
     def showdialog(self):
         dlg = QDialog()
@@ -259,6 +221,6 @@ class Login(QMainWindow):
     def showMainSystem(self):
         # 做好其他窗口后先import进来后就简单调用就ok了
         from main.innerface import MainWindow
-        MainWindow()
-
+        self.w1 = MainWindow()
+        self.w1.show()
 import res_rc
