@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="aa29afd4-577d-4903-940a-1d4fdb486439" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/fold.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/fold.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/setting.json" beforeDir="false" afterPath="$PROJECT_DIR$/config/setting.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/innerface.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/innerface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/login.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/start.py" beforeDir="false" afterPath="$PROJECT_DIR$/start.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +42,7 @@
     &quot;Python.yolov8_demo.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Duuuzx/fish-couting&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Duuuzx/fish-couting/pt&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -58,11 +53,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Duuuzx\fish-couting\pt" />
       <recent name="C:\Users\Duuuzx\fish-couting" />
       <recent name="C:\Users\Duuuzx\fish-couting\main" />
       <recent name="C:\Users\Duuuzx\fish-couting\models" />
       <recent name="C:\Users\Duuuzx\fish-couting\testdata" />
-      <recent name="D:\deeplearning\fish counting" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Duuuzx\fish-couting\main" />
@@ -138,16 +133,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/models/experimental.py</url>
-          <line>4</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
