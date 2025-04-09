@@ -35,7 +35,7 @@ QResource.registerResource("apprcc.qrc")
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(1081, 713)
+        mainWindow.resize(1085, 808)
         mainWindow.setMouseTracking(True)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/img/icon/图片1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -48,8 +48,7 @@ class Ui_mainWindow(object):
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.groupBox_18 = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_18.setStyleSheet("#groupBox_18{\n"
-"    border-image: url(:/icons/icons/fish.jpg);\n"
+        self.groupBox_18.setStyleSheet("#groupBox_18{border-image: url(:D:\\\\deeplearning\\\\fish counting\\\\icons\\\\fish.jpg);\n"
 "border: 0px solid #42adff;\n"
 "border-radius:5px;}")
         self.groupBox_18.setTitle("")
@@ -79,7 +78,7 @@ class Ui_mainWindow(object):
         self.label_7.setMinimumSize(QtCore.QSize(40, 40))
         self.label_7.setMaximumSize(QtCore.QSize(40, 40))
         self.label_7.setStyleSheet("image: url(:/img/icon/conan.png);\n"
-"image: url(:/images/icons/logonew.png)")
+"image: url(:/images/icons/logo.png);")
         self.label_7.setText("")
         self.label_7.setObjectName("label_7")
         self.horizontalLayout.addWidget(self.label_7)
@@ -259,7 +258,7 @@ class Ui_mainWindow(object):
 "margin-top:8;\n"
 "height:20;\n"
 "background:rgba(255,255,255,0);\n"
-"    border-image: url(:/icons/icons/下拉_白色.png);\n"
+"border-image: url(:/img/icon/下拉_白色.png);\n"
 "}\n"
 "")
         self.comboBox.setObjectName("comboBox")
@@ -864,17 +863,22 @@ class Ui_mainWindow(object):
         self.horizontalLayout_39 = QtWidgets.QHBoxLayout(self.groupBox_10)
         self.horizontalLayout_39.setContentsMargins(11, 0, 11, 0)
         self.horizontalLayout_39.setObjectName("horizontalLayout_39")
-        self.resultWidget = QtWidgets.QListWidget(self.groupBox_10)
-        self.resultWidget.setStyleSheet("QListWidget{\n"
-"background-color: rgba(12, 28, 77, 0);\n"
-"\n"
-"border-radius:0px;\n"
-"font-family: \"Microsoft YaHei\";\n"
-"font-size: 16px;\n"
-"color: rgb(218, 218, 218);\n"
-"}\n"
-"")
-        self.resultWidget.setObjectName("resultWidget")
+        self.resultWidget = QtWidgets.QTableWidget(self.groupBox_10)
+        self.resultWidget.setStyleSheet("""
+            QTableWidget {
+                background-color: rgba(12, 28, 77, 0);
+                font-family: "Microsoft YaHei";
+                font-size: 14px;
+                color: white;
+                border: none;
+            }
+            QHeaderView::section {
+                background-color: rgba(100, 100, 100, 150);
+                padding: 4px;
+            }
+        """)
+        self.resultWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.resultWidget.verticalHeader().setVisible(False)
         self.horizontalLayout_39.addWidget(self.resultWidget)
         self.verticalLayout_7.addWidget(self.groupBox_10)
         self.verticalLayout_7.setStretch(1, 1)
@@ -1094,9 +1098,19 @@ class Ui_mainWindow(object):
         mainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(mainWindow)
-        self.minButton.clicked.connect(mainWindow.showMinimized) # type: ignore
-        self.maxButton.clicked.connect(mainWindow.showMaximized) # type: ignore
-        self.closeButton.clicked.connect(mainWindow.close) # type: ignore
+        self.closeButton.clicked.connect(self.closeButton.close) # type: ignore
+        self.minButton.clicked.connect(self.minButton.showMinimized) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox.close) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox_3.close) # type: ignore
+        self.closeButton.clicked.connect(self.raw_video.close) # type: ignore
+        self.closeButton.clicked.connect(self.out_video.close) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox_201.close) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox_2.close) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox_201.close) # type: ignore
+        self.closeButton.clicked.connect(self.statistic_label.close) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox_8.close) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox_4.close) # type: ignore
+        self.closeButton.clicked.connect(self.groupBox_201.close) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
@@ -1127,7 +1141,7 @@ COLORS = [
     (255, 0, 255), (192, 192, 192), (128, 128, 128), (128, 0, 0),
     (128, 128, 0), (0, 128, 0)]
 LABELS = ['fish']
-img_src = cv2.imread('C:\\Users\\Duuuzx\\fish-couting\\testdata\\CS_videoplayback014.png') #指向OpenCv对象
+img_src = cv2.imread('D:\\桌面\\海洋牧场\\fish-couting2\\fish-couting\\testdata\\CS_videoplayback014.png') #指向OpenCv对象
 tclose=False
 truning=False
 tsleep=False
@@ -1213,11 +1227,10 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                 self.det_thread.send_statistic.connect(self.update_statistic)
                 # 添加模型切换信号连接
                 self.comboBox.currentTextChanged.connect(self.change_model)
-                # # 初始化统计表格
-                # self.resultWidget.setColumnCount(2)
-                # self.resultWidget.setHorizontalHeaderLabels(["类别", "数量"])
-                # self.resultWidget.horizontalHeader().setStretchLastSection(True)
-
+                # 初始化统计表格
+                self.resultWidget.setColumnCount(2)
+                self.resultWidget.setHorizontalHeaderLabels(["类别", "数量"])
+                self.resultWidget.horizontalHeader().setStretchLastSection(True)
 
         # 在MainWindow类中添加以下方法
         def open_file(self):

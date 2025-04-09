@@ -44,7 +44,7 @@
      <widget class="QGroupBox" name="groupBox_18">
       <property name="styleSheet">
        <string notr="true">#groupBox_18{
-	background-image: url(:/images/icons/fish.jpg);
+	border-image: url(:/icons/icons/fish.jpg);
 border: 0px solid #42adff;
 border-radius:5px;}</string>
       </property>
@@ -120,7 +120,7 @@ border-radius:0px;}</string>
             </property>
             <property name="styleSheet">
              <string notr="true">image: url(:/img/icon/conan.png);
-image: url(:/images/icons/logo.png);</string>
+image: url(:/images/icons/logonew.png)</string>
             </property>
             <property name="text">
              <string/>
@@ -484,7 +484,7 @@ QComboBox::drop-down {
 margin-top:8;
 height:20;
 background:rgba(255,255,255,0);
-border-image: url(:/img/icon/下拉_白色.png);
+	border-image: url(:/icons/icons/下拉_白色.png);
 }
 </string>
                 </property>

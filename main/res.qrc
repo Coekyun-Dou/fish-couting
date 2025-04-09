@@ -1,9 +1,12 @@
 <RCC>
   <qresource prefix="images">
+    <file>icons/logo2.png</file>
+    <file>icons/logonew.png</file>
     <file>icons/logo.png</file>
     <file>icons/fish.jpg</file>
   </qresource>
   <qresource prefix="icons">
+    <file>icons/fish.jpg</file>
     <file>icons/button-off.png</file>
     <file>icons/button-on.png</file>
     <file>icons/wrj.png</file>
