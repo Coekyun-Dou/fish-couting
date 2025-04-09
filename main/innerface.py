@@ -861,21 +861,29 @@ class Ui_mainWindow(object):
 "border-radius:0px;}")
         self.groupBox_10.setTitle("")
         self.groupBox_10.setObjectName("groupBox_10")
+        # 先创建resultWidget
+        self.resultWidget = QtWidgets.QTableWidget(self.groupBox_10)
+        self.resultWidget.setStyleSheet("""
+                    QTableWidget {
+                        background-color: rgba(45, 45, 45, 200);
+                        font-family: "Microsoft YaHei";
+                        font-size: 14px;
+                        color: white;
+                        border: none;
+                    }
+                    QHeaderView::section {
+                        background-color: #404040;
+                        padding: 4px;
+                    }
+                """)
+        self.resultWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.resultWidget.verticalHeader().setVisible(False)
+        self.resultWidget.setObjectName("resultWidget")  # 设置控件的唯一标识
         self.horizontalLayout_39 = QtWidgets.QHBoxLayout(self.groupBox_10)
         self.horizontalLayout_39.setContentsMargins(11, 0, 11, 0)
-        self.horizontalLayout_39.setObjectName("horizontalLayout_39")
-        self.resultWidget = QtWidgets.QListWidget(self.groupBox_10)
-        self.resultWidget.setStyleSheet("QListWidget{\n"
-"background-color: rgba(12, 28, 77, 0);\n"
-"\n"
-"border-radius:0px;\n"
-"font-family: \"Microsoft YaHei\";\n"
-"font-size: 16px;\n"
-"color: rgb(218, 218, 218);\n"
-"}\n"
-"")
-        self.resultWidget.setObjectName("resultWidget")
-        self.horizontalLayout_39.addWidget(self.resultWidget)
+        self.horizontalLayout_39.addWidget(self.resultWidget)  # 此时控件已存在
+        self.horizontalLayout_39.setStretch(0, 1)
+
         self.verticalLayout_7.addWidget(self.groupBox_10)
         self.verticalLayout_7.setStretch(1, 1)
         self.verticalLayout_8.addLayout(self.verticalLayout_7)
@@ -1137,6 +1145,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
         def __init__(self, parent=None):
                 super(MainWindow, self).__init__(parent)
                 self.setupUi(self) #用于将 UI 设计文件（.ui）中的控件和布局加载到窗口中。
+                self.resultWidget = self.findChild(QtWidgets.QTableWidget, "resultWidget")
                 # QMainWindow.__init__(self, parent)
                 # Ui_mainWindow.__init__(self)
                 # self.setupUi(self)
@@ -1210,14 +1219,14 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                 self.mem_timer.timeout.connect(self.memory_check)
                 self.mem_timer.start(1000)  # 每秒检查
                 # 添加统计信号连接
-                self.det_thread.send_statistic.connect(self.update_statistic)
+                self.det_thread.send_statistic.connect(self._update_statistic_ui)
                 # 添加模型切换信号连接
                 self.comboBox.currentTextChanged.connect(self.change_model)
-                # # 初始化统计表格
-                # self.resultWidget.setColumnCount(2)
-                # self.resultWidget.setHorizontalHeaderLabels(["类别", "数量"])
-                # self.resultWidget.horizontalHeader().setStretchLastSection(True)
-
+                # 初始化统计表格
+                self.resultWidget.setColumnCount(2)
+                self.resultWidget.setHorizontalHeaderLabels(["类别", "数量"])
+                self.resultWidget.horizontalHeader().setStretchLastSection(True)
+                self.det_thread.error_occurred.connect(self.show_msg)
 
         # 在MainWindow类中添加以下方法
         def open_file(self):
@@ -1227,38 +1236,66 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                         QMessageBox.warning(self, "警告", "未找到模型文件")
                         return
 
-                # 打开文件对话框选择图片
+                # 打开文件对话框选择图片或视频
                 file, _ = QFileDialog.getOpenFileName(
                         self,
-                        "选择图片",
+                        "选择文件",
                         "",
-                        "Image Files (*.jpg *.png *.jpeg *.bmp)"
+                        "媒体文件 (*.jpg *.png *.jpeg *.bmp *.mp4 *.avi *.mov)"
                 )
+
                 if file:
-                        # 显示原始图片
-                        self.show_original_image(file)
-                        # 停止当前正在运行的线程（如果有）
+                        self.current_source = file
+                        self.show_initial_preview(file)
+
+                        # 停止当前线程
                         if self.det_thread.isRunning():
                                 self.det_thread.stop()
                                 self.det_thread.wait()
-                        # 启动检测线程
-                        # 重新初始化线程
+
+                        # 初始化检测线程
                         self.det_thread = DetThread()
                         self.det_thread.source = file
-                        self.det_thread.is_continue = True
-                        # 重新连接信号
+                        self.det_thread.send_raw.connect(lambda x: self.show_image(x, self.raw_video))
                         self.det_thread.send_img.connect(lambda x: self.show_image(x, self.out_video))
+                        self.det_thread.send_statistic.connect(self._update_statistic_ui)
+                        self.det_thread.send_msg.connect(self.show_msg)
+
+                        # 连接控制按钮
+                        self.runButton.clicked.connect(self.toggle_detection)
+                        self.stopButton.clicked.connect(self.stop_detection)
+
+                        # 初始化进度条
+                        self.progressBar.setValue(0)
                         self.det_thread.start()
 
-        def show_original_image(self, img_path):
-                """显示原始图片到左侧窗口"""
-                pixmap = QPixmap(img_path)
-                scaled_pixmap = pixmap.scaled(
-                        self.raw_video.size(),
-                        Qt.KeepAspectRatio,
-                        Qt.SmoothTransformation
-                )
-                self.raw_video.setPixmap(scaled_pixmap)
+        def show_initial_preview(self, file_path):
+                """显示文件预览"""
+                if file_path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
+                        pixmap = QPixmap(file_path)
+                        self.raw_video.setPixmap(pixmap.scaled(self.raw_video.size(),
+                                                               Qt.KeepAspectRatio,
+                                                               Qt.SmoothTransformation))
+                else:  # 视频文件
+                        cap = cv2.VideoCapture(file_path)
+                        ret, frame = cap.read()
+                        if ret:
+                                self.show_image(frame, self.raw_video)
+                        cap.release()
+
+        # def show_original_image(self, img_path):
+        #         """显示原始图片到左侧窗口"""
+        #         pixmap = QPixmap(img_path)
+        #         scaled_pixmap = pixmap.scaled(
+        #                 self.raw_video.size(),
+        #                 Qt.KeepAspectRatio,
+        #                 Qt.SmoothTransformation
+        #         )
+        #         self.raw_video.setPixmap(scaled_pixmap)
+
+        def show_msg(self, msg):
+                """在界面底部状态栏显示消息"""
+                self.statistic_label.setText(msg)  # 使用已有的统计标签显示消息
 
         # 修改现有的show_image方法
         def show_image(self, img_src, label):
@@ -1266,26 +1303,34 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                         if img_src is None:
                                 return
 
-                        ih, iw = img_src.shape[:2]
-                        # 获取label的当前尺寸
+                        # 获取当前label尺寸
                         label_width = label.width()
                         label_height = label.height()
 
-                        # 计算保持比例的缩放
-                        scale = min(label_width / iw, label_height / ih)
-                        new_width = int(iw * scale)
-                        new_height = int(ih * scale)
+                        # 计算缩放比例
+                        h, w = img_src.shape[:2]
+                        scale = min(label_width / w, label_height / h)
 
-                        # 调整图像尺寸
-                        img_resized = cv2.resize(img_src, (new_width, new_height))
+                        # 优化大尺寸图像处理
+                        if max(w, h) > 1920:  # 对大于1080p的图像进行下采样
+                                img_src = cv2.resize(img_src, (int(w * 0.5), int(h * 0.5)))
 
                         # 转换为RGB
-                        img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
-                        qimg = QImage(img_rgb.data, new_width, new_height, 3 * new_width, QImage.Format_RGB888)
+                        img_rgb = cv2.cvtColor(img_src, cv2.COLOR_BGR2RGB)
+                        qimg = QImage(img_rgb.data, img_rgb.shape[1], img_rgb.shape[0],
+                                      img_rgb.strides[0], QImage.Format_RGB888)
                         pixmap = QPixmap.fromImage(qimg)
-                        label.setPixmap(pixmap)
+
+                        # 保持比例缩放
+                        scaled_pixmap = pixmap.scaled(
+                                label.size() * 0.95,  # 保留5%的边距
+                                Qt.KeepAspectRatio,
+                                Qt.SmoothTransformation
+                        )
+                        label.setPixmap(scaled_pixmap)
+
                 except Exception as e:
-                        print(f"显示错误: {e}")
+                        print(f"显示错误: {str(e)}")
 
                  # 根据某个按钮的状态来决定窗口的显示方式
         def max_or_restore(self):
@@ -1311,38 +1356,72 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                 super().closeEvent(event)
 
         def memory_check(self):
+                """内存使用监控"""
                 process = psutil.Process(os.getpid())
                 mem = process.memory_info().rss / 1024 / 1024  # MB
-                if mem > 2048:  # 2GB 阈值
-                        QMessageBox.warning(self, "内存警告", f"内存使用过高: {mem:.1f}MB")
-                        self.det_thread.jump_out = True
+                if mem > 2048:  # 2GB阈值
+                        self.show_msg(f"内存使用过高: {mem:.1f}MB，正在释放资源...")
+                        if self.det_thread.isRunning():
+                                self.det_thread.stop()
+                        torch.cuda.empty_cache()
+                        QMessageBox.warning(self, "内存警告", "已释放资源，请重新启动检测")
 
                 # 新增统计信息更新方法
 
-        def update_statistic(self, class_count):
-                """更新统计信息"""
+        def _update_statistic_ui(self, class_count):
                 try:
-                        self.resultWidget.setRowCount(0)  # 清空表格
-                        for row, (class_name, count) in enumerate(class_count.items()):
-                                self.resultWidget.insertRow(row)
-                                self.resultWidget.setItem(row, 0, QTableWidgetItem(class_name))
-                                self.resultWidget.setItem(row, 1, QTableWidgetItem(str(count)))
-
-                        # 更新底部统计标签
-                        total = sum(class_count.values())
-                        self.statistic_label.setText(f"检测总数: {total}")
-                        self.statistic_label.setStyleSheet("font-size: 14px; color: white;")
+                        self.resultWidget.setRowCount(0)
+                        if class_count:
+                                for row, (name, count) in enumerate(class_count.items()):
+                                        self.resultWidget.insertRow(row)
+                                        self.resultWidget.setItem(row, 0, QTableWidgetItem(str(name)))
+                                        self.resultWidget.setItem(row, 1, QTableWidgetItem(str(count)))
+                        else:
+                                self.resultWidget.insertRow(0)
+                                self.resultWidget.setItem(0, 0, QTableWidgetItem("无检测结果"))
                 except Exception as e:
-                        print(f"更新统计信息错误: {e}")
+                        print(f"更新表格错误: {e}")
 
         def change_model(self):
                 """切换模型处理"""
                 try:
+                        # 停止当前检测线程
+                        if self.det_thread.isRunning():
+                                self.det_thread.stop()
+                                self.det_thread.wait()  # 等待线程结束
+
+                        # 设置新模型路径
                         self.model_type = self.comboBox.currentText()
-                        self.det_thread.set_weights(f"./pt/{self.model_type}")
-                        self.show_msg(f'切换模型为: {self.model_type}')
+                        model_path = os.path.join("./pt", self.model_type)
+                        if not os.path.exists(model_path):
+                                raise FileNotFoundError(f"模型文件 {model_path} 不存在")
+
+                        # 加载新模型
+                        self.det_thread.set_weights(model_path)
+                        self.show_msg(f"模型已切换为: {self.model_type}")
+
                 except Exception as e:
-                        self.show_msg(f'模型切换失败: {str(e)}')
+                        self.show_msg(f"模型切换失败: {str(e)}")
+
+        def toggle_detection(self):
+                """切换检测状态（播放/暂停）"""
+                if self.det_thread.isRunning():
+                        if self.det_thread.is_paused:
+                                self.det_thread.resume()
+                                self.runButton.setChecked(True)
+                                self.runButton.setToolTip("暂停检测")
+                        else:
+                                self.det_thread.pause()
+                                self.runButton.setChecked(False)
+                                self.runButton.setToolTip("继续检测")
+
+        def stop_detection(self):
+                """停止检测"""
+                if self.det_thread.isRunning():
+                        self.det_thread.stop()
+                        self.runButton.setChecked(False)
+                        self.progressBar.setValue(0)
+                        self.statistic_label.setText("检测已停止")
 
 class DetThread(QThread):
         # 定义信号
@@ -1365,80 +1444,164 @@ class DetThread(QThread):
                 self.jump_out = False  # 跳出循环标志
                 self.save_fold = './result'  # 结果保存路径
                 self.model = None  # YOLO模型实例
+                self.vid_writer = None
+                self.cap = None
+                self.frame_count = 0
+                self.total_frames = 0
+                self.is_paused = False
+                self.lock = threading.Lock()
 
         def run(self):
                 try:
-                        print("[DEBUG] 开始检测...")
-                        # 初始化模型
-                        if not self.model:
-                                self.model = YOLO(self.weights, task='detect')
-                                self.model.to('cpu') # 显式指定 CPU
+                        self.model = YOLO(self.weights, task='detect')
+                        self.model.to('cpu')
+                        self.model.conf = self.conf
+                        self.model.iou = self.iou
 
-                        # 设置检测参数
-                        self.model.conf = self.conf  # 置信度阈值
-                        self.model.iou = self.iou  # NMS IOU阈值
-
-                        # 执行图片检测
-                        img = cv2.imread(self.source)
-                        if img is None:
-                                raise ValueError(f"无法读取图片: {self.source}")
-
-                        # 发送原始图像信号
-                        self.send_raw.emit(img)
-
-                        # 执行推理
-                        if not self.jump_out:
-                                results = self.model(img, stream=False)
-                                synchronize() # CUDA同步
-
-                        # 处理检测结果
-                        annotated_img = img.copy()
-                        class_count = defaultdict(int)
-
-                        for result in results:
-                                # 解析检测结果
-                                for box in result.boxes:
-                                        class_id = int(box.cls)
-                                        class_name = self.model.names[class_id]
-                                        class_count[class_name] += 1
-
-                                        # 绘制边界框
-                                        x1, y1, x2, y2 = map(int, box.xyxy[0])
-                                        cv2.rectangle(annotated_img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
-                                        # 绘制标签
-                                        label = f"{class_name}: {box.conf.item():.2f}"
-                                        cv2.putText(annotated_img, label, (x1, y1 - 10),
-                                                    cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-
-                        if not self.jump_out:
-                                print(f"[DEBUG] 发送处理后的图像, 形状: {annotated_img.shape}")
-                                self.send_img.emit(annotated_img)# 发送处理后的图像
-                                self.send_statistic.emit(class_count)# 发送统计信息
-
-                        cv2.imwrite('debug_output.jpg', annotated_img)
-
-                        print("[DEBUG] 检测结果已保存到 debug_output.jpg")
-                        # 统计处理
-                        class_count = defaultdict(int)
-                        for result in results:
-                                for box in result.boxes:
-                                        class_id = int(box.cls)
-                                        class_name = self.model.names[class_id]
-                                        class_count[class_name] += 1
-
-                        # 发送统计信息
-                        self.send_statistic.emit(dict(class_count))
+                        # 判断输入类型
+                        if self.source.lower().endswith(('.mp4', '.avi', '.mov')):
+                                self.process_video()
+                        else:
+                                self.process_image()
 
                 except Exception as e:
-                        print(f"[ERROR] 检测异常: {e}")
+                        self.send_msg.emit(f"检测错误: {str(e)}")
                         self.error_occurred.emit(str(e))
                 finally:
-                        if self.model:
-                                self.model = None
-                                torch.cuda.empty_cache()
-                        self.quit()
-                        self.wait(500)  # 确保线程终止
+                        if self.cap:
+                                self.cap.release()
+                        if self.vid_writer:
+                                self.vid_writer.release()
+                        self.model = None
+                        torch.cuda.empty_cache()
+
+        def process_video(self):
+                """处理视频流"""
+                self.cap = cv2.VideoCapture(self.source)
+                if not self.cap.isOpened():
+                        raise ValueError("无法打开视频文件")
+
+                # 获取视频信息
+                self.total_frames = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
+                fps = self.cap.get(cv2.CAP_PROP_FPS)
+                frame_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+                frame_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+                # 初始化视频保存
+                if self.save_fold and not os.path.exists(self.save_fold):
+                        os.makedirs(self.save_fold)
+                save_path = os.path.join(self.save_fold,
+                                         os.path.basename(self.source))
+                self.vid_writer = cv2.VideoWriter(save_path,
+                                                  cv2.VideoWriter_fourcc(*'mp4v'),
+                                                  fps,
+                                                  (frame_width, frame_height))
+
+                while not self.jump_out and self.cap.isOpened():
+                        with self.lock:
+                                if self.is_paused:
+                                        time.sleep(0.1)
+                                        continue
+
+                        ret, frame = self.cap.read()
+                        if not ret:
+                                break
+
+                        # 处理帧
+                        self.frame_count += 1
+                        self.send_percent.emit(int(self.frame_count / self.total_frames * 1000))
+
+                        # 发送原始帧
+                        self.send_raw.emit(frame)
+
+                        # 执行检测
+                        results = self.model(frame, verbose=False)
+
+                        # 绘制结果
+                        annotated_frame = self.annotate_frame(frame, results[0])
+
+                        # 发送检测结果
+                        self.send_img.emit(annotated_frame)
+
+                        # 保存结果
+                        if self.vid_writer:
+                                self.vid_writer.write(annotated_frame)
+
+                        # 更新统计
+                        class_count = self.get_statistics(results[0])
+                        self.send_statistic.emit(class_count)
+
+                        # 保持播放速度
+                        time.sleep(0.03)  # ~30fps
+
+        def process_image(self):
+                """处理单张图片"""
+                img = cv2.imread(self.source)
+                if img is None:
+                        raise ValueError("无法读取图片文件")
+
+                # 发送原始图像
+                self.send_raw.emit(img)
+
+                # 执行检测
+                results = self.model(img, verbose=False)
+
+                # 绘制结果
+                annotated_img = self.annotate_frame(img, results[0])
+
+                # 发送检测结果
+                self.send_img.emit(annotated_img)
+
+                # 保存结果
+                if self.save_fold:
+                        if not os.path.exists(self.save_fold):
+                                os.makedirs(self.save_fold)
+                        save_path = os.path.join(self.save_fold,
+                                                 os.path.basename(self.source))
+                        cv2.imwrite(save_path, annotated_img)
+
+                # 更新统计
+                class_count = self.get_statistics(results[0])
+                self.send_statistic.emit(class_count)
+
+        def annotate_frame(self, frame, result):
+                """绘制检测结果"""
+                annotated = frame.copy()
+                class_count = defaultdict(int)
+
+                for box in result.boxes:
+                        # 绘制边界框
+                        x1, y1, x2, y2 = map(int, box.xyxy[0])
+                        cv2.rectangle(annotated, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+                        # 绘制标签
+                        class_id = int(box.cls)
+                        class_name = self.model.names[class_id]
+                        conf = float(box.conf)
+                        label = f"{class_name} {conf:.2f}"
+                        cv2.putText(annotated, label, (x1, y1 - 10),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+
+                        class_count[class_name] += 1
+
+                return annotated
+
+        def get_statistics(self, result):
+                """获取统计信息"""
+                class_count = defaultdict(int)
+                for box in result.boxes:
+                        class_id = int(box.cls)
+                        class_name = self.model.names[class_id]
+                        class_count[class_name] += 1
+                return dict(class_count)
+
+        def pause(self):
+                with self.lock:
+                        self.is_paused = True
+
+        def resume(self):
+                with self.lock:
+                        self.is_paused = False
 
         def stop(self):
                 self.jump_out = True
@@ -1448,12 +1611,15 @@ class DetThread(QThread):
         def set_weights(self, weights_path):
                 """更换模型"""
                 try:
-                        self.weights = weights_path
+                        # 释放旧模型资源
                         if self.model:
-                                del self.model  # 释放原模型
+                                del self.model
                                 torch.cuda.empty_cache()
+
+                        # 加载新模型
+                        self.weights = weights_path
                         self.model = YOLO(self.weights, task='detect')
-                        self.model.to('cpu')
+                        self.model.to('cpu')  # 确保使用CPU
                 except Exception as e:
                         self.error_occurred.emit(f'加载模型失败: {str(e)}')
 
@@ -1462,4 +1628,6 @@ class DetThread(QThread):
                 for key, value in kwargs.items():
                         if hasattr(self, key):
                                 setattr(self, key, value)
+
+
 

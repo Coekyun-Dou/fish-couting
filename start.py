@@ -12,8 +12,8 @@ import res_rc
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    # login_window = Login()
-    login_window = MainWindow()
+    login_window = Login()
+    # login_window = MainWindow()
 
     # login.setObjectName("MainWindow")
     # login.setStyleSheet("#MainWindow{border-image:url(img/icon/fish.jpg)}") #设置背景
