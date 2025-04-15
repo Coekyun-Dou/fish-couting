@@ -25,151 +25,149 @@ class Login(QMainWindow):
         self.setWindowTitle('基于YOLOv8的水下鱼类计数系统')
 
     def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(812, 414)
-        Form.setMinimumSize(QtCore.QSize(796, 414))
-        Form.setMaximumSize(QtCore.QSize(812, 16777215))
-        self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(260, 0, 550, 410))
-        self.label_2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"background-image: url(:/images/icons/fish.jpg);")
-        self.label_2.setText("")
-        self.label_2.setObjectName("label_2")
-        self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(0, 0, 260, 410))
-        self.label.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.label.setText("")
-        self.label.setObjectName("label")
-        self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setGeometry(QtCore.QRect(260, 0, 550, 410))
-        self.label_3.setStyleSheet("background-color: rgba(0, 0, 0,100);\n"
-"")
-        self.label_3.setText("")
-        self.label_3.setObjectName("label_3")
-        self.label_4 = QtWidgets.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(50, 70, 161, 41))
-        font = QtGui.QFont()
-        font.setFamily("黑体")
-        font.setPointSize(21)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_4.setFont(font)
-        self.label_4.setObjectName("label_4")
-        self.lineEdit = QtWidgets.QLineEdit(Form)
-        self.lineEdit.setGeometry(QtCore.QRect(30, 160, 201, 41))
-        self.lineEdit.setStyleSheet("border:none;\n"
-"border-bottom:2px solid rgba（0,0,0,100）;\n"
-"background-color: rgba(0, 0, 0,0);\n"
-"")
-        self.lineEdit.setObjectName("lineEdit")
-        self.lineEdit_2 = QtWidgets.QLineEdit(Form)
-        self.lineEdit_2.setGeometry(QtCore.QRect(30, 220, 201, 41))
-        self.lineEdit_2.setStyleSheet("border:none;\n"
-"border-bottom:2px solid rgba（0,0,0,100）;\n"
-"background-color: rgba(0, 0, 0,0);\n"
-"")
-        self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(80, 300, 121, 41))
-        font = QtGui.QFont()
-        font.setFamily("黑体")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.pushButton.setFont(font)
-        self.pushButton.setStyleSheet("QPushButton{\n"
-"    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:1, stop:0.188482 rgba(1, 60, 137, 255), stop:1 rgba(255, 255, 255, 255));\n"
-"    color: rgb(255, 255, 255);\n"
-"    border:none;\n"
-"}\n"
-"QPushButton:pressed{\n"
-"    padding-left:5px;\n"
-"    padding-top:5px;\n"
-"}\n"
-"")
-        self.pushButton.setObjectName("pushButton")
-        self.label_8 = QtWidgets.QLabel(Form)
-        self.label_8.setGeometry(QtCore.QRect(340, 360, 411, 31))
-        self.label_8.setMaximumSize(QtCore.QSize(411, 31))
-        font = QtGui.QFont()
-        font.setFamily("宋体")
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_8.setFont(font)
-        self.label_8.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label_8.setTextFormat(QtCore.Qt.AutoText)
-        self.label_8.setIndent(5)
-        self.label_8.setObjectName("label_8")
-        self.label_7 = QtWidgets.QLabel(Form)
-        self.label_7.setGeometry(QtCore.QRect(280, 80, 511, 181))
-        font = QtGui.QFont()
-        font.setFamily("隶书")
-        font.setPointSize(20)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_7.setFont(font)
-        self.label_7.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label_7.setObjectName("label_7")
-        self.label_9 = QtWidgets.QLabel(Form)
-        self.label_9.setGeometry(QtCore.QRect(270, 10, 71, 61))
-        self.label_9.setStyleSheet("\n"
-"image: url(:/images/icons/logo.png);")
-        self.label_9.setText("")
-        self.label_9.setObjectName("label_9")
-        self.frame = QtWidgets.QFrame(Form)
-        self.frame.setGeometry(QtCore.QRect(720, 10, 81, 41))
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame)
-        self.pushButton_2.setStyleSheet("QPushButton{\n"
-"    border:none;\n"
-"}\n"
-"QPushButton:hover{\n"
-"    padding-bottom:5px;\n"
-"}")
-        self.pushButton_2.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icons/icons/最小化.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_2.setIcon(icon)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.horizontalLayout.addWidget(self.pushButton_2)
-        self.pushButton_3 = QtWidgets.QPushButton(self.frame)
-        self.pushButton_3.setStyleSheet("QPushButton{\n"
-"    border:none;\n"
-"}\n"
-"QPushButton:hover{\n"
-"    padding-bottom:5px;\n"
-"}")
-        self.pushButton_3.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icons/icons/关闭.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_3.setIcon(icon1)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout.addWidget(self.pushButton_3)
+            Form.setObjectName("Form")
+            Form.resize(812, 414)
+            Form.setMinimumSize(QtCore.QSize(796, 414))
+            Form.setMaximumSize(QtCore.QSize(812, 16777215))
+            self.label_2 = QtWidgets.QLabel(Form)
+            self.label_2.setGeometry(QtCore.QRect(260, 0, 550, 410))
+            self.label_2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+                                       "background-image: url(:/images/icons/fish.jpg);")
+            self.label_2.setText("")
+            self.label_2.setObjectName("label_2")
+            self.label = QtWidgets.QLabel(Form)
+            self.label.setGeometry(QtCore.QRect(0, 0, 260, 410))
+            self.label.setStyleSheet("background-color: rgb(255, 255, 255);")
+            self.label.setText("")
+            self.label.setObjectName("label")
+            self.label_3 = QtWidgets.QLabel(Form)
+            self.label_3.setGeometry(QtCore.QRect(260, 0, 550, 410))
+            self.label_3.setStyleSheet("background-color: rgba(0, 0, 0,100);\n"
+                                       "")
+            self.label_3.setText("")
+            self.label_3.setObjectName("label_3")
+            self.label_4 = QtWidgets.QLabel(Form)
+            self.label_4.setGeometry(QtCore.QRect(50, 70, 161, 41))
+            font = QtGui.QFont()
+            font.setFamily("黑体")
+            font.setPointSize(21)
+            font.setBold(True)
+            font.setItalic(False)
+            font.setWeight(75)
+            self.label_4.setFont(font)
+            self.label_4.setObjectName("label_4")
+            self.lineEdit = QtWidgets.QLineEdit(Form)
+            self.lineEdit.setGeometry(QtCore.QRect(30, 160, 201, 41))
+            self.lineEdit.setStyleSheet("border:none;\n"
+                                        "border-bottom:2px solid rgba（0,0,0,100）;\n"
+                                        "background-color: rgba(0, 0, 0,0);\n"
+                                        "")
+            self.lineEdit.setObjectName("lineEdit")
+            self.lineEdit_2 = QtWidgets.QLineEdit(Form)
+            self.lineEdit_2.setGeometry(QtCore.QRect(30, 220, 201, 41))
+            self.lineEdit_2.setStyleSheet("border:none;\n"
+                                          "border-bottom:2px solid rgba（0,0,0,100）;\n"
+                                          "background-color: rgba(0, 0, 0,0);\n"
+                                          "")
+            self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)
+            self.lineEdit_2.setObjectName("lineEdit_2")
+            self.pushButton = QtWidgets.QPushButton(Form)
+            self.pushButton.setGeometry(QtCore.QRect(80, 300, 121, 41))
+            font = QtGui.QFont()
+            font.setFamily("黑体")
+            font.setPointSize(12)
+            font.setBold(True)
+            font.setItalic(False)
+            font.setWeight(75)
+            self.pushButton.setFont(font)
+            self.pushButton.setStyleSheet("QPushButton{\n"
+                                          "    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:1, stop:0.188482 rgba(1, 60, 137, 255), stop:1 rgba(255, 255, 255, 255));\n"
+                                          "    color: rgb(255, 255, 255);\n"
+                                          "    boder:none;\n"
+                                          "}\n"
+                                          "QPushButton:pressed{\n"
+                                          "    padding-left:5px;\n"
+                                          "    padding-top:5px;\n"
+                                          "}\n"
+                                          "")
+            self.pushButton.setObjectName("pushButton")
+            self.label_8 = QtWidgets.QLabel(Form)
+            self.label_8.setGeometry(QtCore.QRect(400, 360, 411, 31))
+            self.label_8.setMaximumSize(QtCore.QSize(411, 31))
+            font = QtGui.QFont()
+            font.setFamily("宋体")
+            font.setBold(True)
+            font.setWeight(75)
+            self.label_8.setFont(font)
+            self.label_8.setStyleSheet("color: rgb(255, 255, 255);")
+            self.label_8.setTextFormat(QtCore.Qt.AutoText)
+            self.label_8.setIndent(5)
+            self.label_8.setObjectName("label_8")
+            self.label_7 = QtWidgets.QLabel(Form)
+            self.label_7.setGeometry(QtCore.QRect(290, 80, 511, 181))
+            font = QtGui.QFont()
+            font.setFamily("隶书")
+            font.setPointSize(20)
+            font.setBold(True)
+            font.setWeight(75)
+            self.label_7.setFont(font)
+            self.label_7.setStyleSheet("color: rgb(255, 255, 255);")
+            self.label_7.setObjectName("label_7")
+            self.label_9 = QtWidgets.QLabel(Form)
+            self.label_9.setGeometry(QtCore.QRect(270, 10, 71, 61))
+            self.label_9.setStyleSheet("\n"
+                                       "image: url(:/images/icons/logonew.png)")
+            self.label_9.setText("")
+            self.label_9.setObjectName("label_9")
+            self.frame = QtWidgets.QFrame(Form)
+            self.frame.setGeometry(QtCore.QRect(720, 10, 81, 41))
+            self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+            self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+            self.frame.setObjectName("frame")
+            self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
+            self.horizontalLayout.setObjectName("horizontalLayout")
+            self.pushButton_2 = QtWidgets.QPushButton(self.frame)
+            self.pushButton_2.setStyleSheet("QPushButton{\n"
+                                            "    border:none;\n"
+                                            "}\n"
+                                            "QPushButton:hover{\n"
+                                            "    padding-bottom:5px;\n"
+                                            "}")
+            self.pushButton_2.setText("")
+            icon = QtGui.QIcon()
+            icon.addPixmap(QtGui.QPixmap(":/icons/icons/最小化.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.pushButton_2.setIcon(icon)
+            self.pushButton_2.setObjectName("pushButton_2")
+            self.horizontalLayout.addWidget(self.pushButton_2)
+            self.pushButton_3 = QtWidgets.QPushButton(self.frame)
+            self.pushButton_3.setStyleSheet("QPushButton{\n"
+                                            "    border:none;\n"
+                                            "}\n"
+                                            "QPushButton:hover{\n"
+                                            "    padding-bottom:5px;\n"
+                                            "}")
+            self.pushButton_3.setText("")
+            icon1 = QtGui.QIcon()
+            icon1.addPixmap(QtGui.QPixmap(":/icons/icons/关闭.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            self.pushButton_3.setIcon(icon1)
+            self.pushButton_3.setObjectName("pushButton_3")
+            self.horizontalLayout.addWidget(self.pushButton_3)
 
-        self.retranslateUi(Form)
-        self.pushButton.clicked.connect(self.showMainSystem)
-        self.pushButton_3.clicked.connect(Form.close) # type: ignore
-        self.pushButton_2.clicked.connect(Form.showMinimized) # type: ignore
-        QtCore.QMetaObject.connectSlotsByName(Form)
-        # 连接按钮点击事件
-
+            self.retranslateUi(Form)
+            self.pushButton.clicked.connect(self.showMainSystem)
+            self.pushButton_3.clicked.connect(Form.close)  # type: ignore
+            self.pushButton_2.clicked.connect(Form.showMinimized)  # type: ignore
+            QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
-        self.label_4.setText(_translate("Form", "欢迎登录"))
-        self.lineEdit.setPlaceholderText(_translate("Form", "账号："))
-        self.lineEdit_2.setPlaceholderText(_translate("Form", "密码："))
-        self.pushButton.setText(_translate("Form", "登录"))
-        self.label_8.setText(_translate("Form", "         广东海洋大学AI应用创新团队"))
-        self.label_7.setText(_translate("Form", "基于YOLOv8的水下鱼类计数系统"))
+            _translate = QtCore.QCoreApplication.translate
+            Form.setWindowTitle(_translate("Form", "Form"))
+            self.label_4.setText(_translate("Form", "欢迎登录"))
+            self.lineEdit.setPlaceholderText(_translate("Form", "账号："))
+            self.lineEdit_2.setPlaceholderText(_translate("Form", "密码："))
+            self.pushButton.setText(_translate("Form", "登录"))
+            self.label_8.setText(_translate("Form", "“海瞳智控”AI创新应用团队研发"))
+            self.label_7.setText(_translate("Form", "基于YOLOv8的水下鱼类计数系统"))
 
     def showdialog(self):
         dlg = QDialog()
@@ -219,7 +217,6 @@ class Login(QMainWindow):
             conn.close()  # 关闭连接
 
     def showMainSystem(self):
-        # 做好其他窗口后先import进来后就简单调用就ok了
         from main.innerface import MainWindow
         self.w1 = MainWindow()
         self.w1.show()

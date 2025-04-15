@@ -1141,7 +1141,6 @@ truning=False
 tsleep=False
 
 class MainWindow(QMainWindow, Ui_mainWindow):
-        #一个初始化函数
         def __init__(self, parent=None):
                 super(MainWindow, self).__init__(parent)
                 self.setupUi(self) #用于将 UI 设计文件（.ui）中的控件和布局加载到窗口中。
@@ -1228,7 +1227,6 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                 self.resultWidget.horizontalHeader().setStretchLastSection(True)
                 self.det_thread.error_occurred.connect(self.show_msg)
 
-        # 在MainWindow类中添加以下方法
         def open_file(self):
                 """选择图片文件并触发检测"""
                 config_file = './pt/best.pt'  # 这里的模型名称更改无用，需要到线程里面进行修改
@@ -1283,21 +1281,10 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                                 self.show_image(frame, self.raw_video)
                         cap.release()
 
-        # def show_original_image(self, img_path):
-        #         """显示原始图片到左侧窗口"""
-        #         pixmap = QPixmap(img_path)
-        #         scaled_pixmap = pixmap.scaled(
-        #                 self.raw_video.size(),
-        #                 Qt.KeepAspectRatio,
-        #                 Qt.SmoothTransformation
-        #         )
-        #         self.raw_video.setPixmap(scaled_pixmap)
-
         def show_msg(self, msg):
                 """在界面底部状态栏显示消息"""
                 self.statistic_label.setText(msg)  # 使用已有的统计标签显示消息
 
-        # 修改现有的show_image方法
         def show_image(self, img_src, label):
                 try:
                         if img_src is None:
@@ -1333,6 +1320,7 @@ class MainWindow(QMainWindow, Ui_mainWindow):
                         print(f"显示错误: {str(e)}")
 
                  # 根据某个按钮的状态来决定窗口的显示方式
+
         def max_or_restore(self):
                 if self.maxButton.isChecked():  # 检查maxButton是否被选中
                         self.showMaximized()  # 最大化
