@@ -1,4 +1,4 @@
-# fish-couting
+# fish-counting
 > 一个基于改进YOLOv8s的海洋牧场鱼类数量检测系统
 > <a href="https://github.com/Coekyun-Dou">
 <img align="right" src="https://github-readme-stats.vercel.app/api?username=Coekyun-Dou&show_icons=true">
