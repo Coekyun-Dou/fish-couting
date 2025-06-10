@@ -26,5 +26,5 @@
 #### 2）系统参数调制页面
 ![image](https://github.com/user-attachments/assets/5fe287d5-e8b5-4a5c-acec-143749d52be7)
 
-#### 3）水下 鱼类计数测量展示页面
+#### 3）水下鱼类计数测量展示页面
 ![image](https://github.com/user-attachments/assets/7e3c0ac5-4549-49c3-9d96-f71bb8742068)
